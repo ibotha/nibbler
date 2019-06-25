@@ -1,8 +1,15 @@
-CC = g++
+CC = gcc
+CPPC = g++
 
 NAME = nibbler
 
-FLAGS = -Wall -Werror -Wextra -std=c++17
+CFLAGSOG = 
+CPPFLAGSOG = -std=c++17
+
+FLAGS = -Wall -Werror -Wextra -I glfw/include -I glad/include
+
+CFLAGS = $(CFLAGSOG) $(FLAGS)
+CPPFLAGS = $(CPPFLAGSOG) $(FLAGS)
 
 FILES = main.cpp
 
@@ -16,6 +23,7 @@ IDIR = inc
 DEPS = 
 
 OBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(FILES))
+OBJ := $(patsubst %.c, $(ODIR)/%.o, $(OBJ))
 SRC := $(patsubst %, $(SDIR)/%, $(FILES))
 DEPS := $(patsubst %, $(IDIR)/%, $(DEPS))
 PCH := $(patsubst %, %.gch, $(COMPILEDHPP))
@@ -31,20 +39,29 @@ CYAN=\033[0;36m
 WHITE=\033[0;37m
 END=\033[0m
 
-all: $(NAME)
+all: GLFW $(NAME)
 
-$(NAME): $(ODIR) $(PCH) $(OBJ)
+GLFW:
+	@echo "$(CYAN)Making\t\t$(GREEN)GLFW$(END)";
+	@cmake glfw
+	@-make -s -C glfw
+
+$(NAME): $(ODIR) $(ODIR)/glad.o $(PCH) $(OBJ)
 	@echo "$(CYAN)Linking\t\t$(GREEN)$(NAME)$(END)";
-	@$(CC) -o $(NAME) $(OBJ) $(FLAGS) -I $(IDIR)
+	@$(CPPC) -o $(NAME) $(OBJ) $(CPPFLAGS) -I $(IDIR) $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 %.hpp.gch: %.hpp
 	@echo "$(YELLOW)Compiling\t$(GREEN)$@$(END)";
-	@$(CC) -o $@ $< $(FLAGS) -I $(IDIR)
+	$(CPPC) -o $@ $< $(CPPFLAGS) -I $(IDIR)
 
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS) $(COMPILEDHPP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$@$(END)";
-	@$(CC) -c -o $@ $< $(FLAGS) -I $(IDIR) -I . -include $(COMPILEDHPP)
+	@$(CPPC) -c -o $@ $< $(CPPFLAGS) -I $(IDIR) -I . -include $(COMPILEDHPP)
+
+$(ODIR)/glad.o: glad/src/glad.c $(DEPS) $(COMPILEDHPP)
+	@echo "$(CYAN)Compiling\t$(GREEN)$@$(END)";
+	@$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR):
 	@echo "$(CYAN)Creating\t$(GREEN)$(ODIR)$(END)";
@@ -64,7 +81,10 @@ clean:
 fclean: clean
 	@echo "$(RED)Removing\t$(GREEN)$(NAME)$(END)";
 	@rm -rf $(NAME)
+	@make clean -C glfw
 
 re: fclean all
 
-.PHONY: re clean all fclean
+shallowre: clean all
+
+.PHONY: re clean all fclean GLFW
