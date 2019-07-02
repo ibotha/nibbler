@@ -1,4 +1,8 @@
 #include <iostream>
-#include <glad/glad.h>
-#define GL_SILENCE_DEPRECATION
-#include <GLFW/glfw3.h>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <chrono>
+
+#define WIDTH 50
+#define HEIGHT 50

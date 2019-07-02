@@ -11,7 +11,7 @@ FLAGS = -Wall -Werror -Wextra -I glfw/include -I glad/include
 CFLAGS = $(CFLAGSOG) $(FLAGS)
 CPPFLAGS = $(CPPFLAGSOG) $(FLAGS)
 
-FILES = main.cpp
+FILES = main.cpp Renderers/OpenGLRenderer.cpp Game.cpp
 
 COMPILEDHPP = nibblerpch.hpp
 
@@ -20,7 +20,7 @@ SDIR = src
 
 IDIR = inc
 
-DEPS = 
+DEPS = Renderer.hpp Game.hpp
 
 OBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(FILES))
 OBJ := $(patsubst %.c, $(ODIR)/%.o, $(OBJ))
