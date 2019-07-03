@@ -6,7 +6,7 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/02 15:45:21 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/03 11:16:52 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,10 @@ void Game::Update()
 		x = m_Renderer->GetWidth();
 	if (y < 0)
 		y = m_Renderer->GetHeight();
+
+	if (m_Renderer->GetKey(NB_KEY_SPACE))
+	{
+	}
 }
 
 void Game::Render()

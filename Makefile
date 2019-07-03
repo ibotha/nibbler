@@ -11,20 +11,44 @@ FLAGS = -Wall -Werror -Wextra -I glfw/include -I glad/include
 CFLAGS = $(CFLAGSOG) $(FLAGS)
 CPPFLAGS = $(CPPFLAGSOG) $(FLAGS)
 
-FILES = main.cpp Renderers/OpenGLRenderer.cpp Game.cpp
+OTHERFILES =  $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+
+FILES = main.cpp Game.cpp
+
+OPENGLSRC = Renderers/OpenGLRenderer.cpp
+SDLSRC = Renderers/SDLRenderer.cpp
+SFMLSRC = Renderers/SFMLRenderer.cpp
+
+OPENGLLIB = libOpengl.so
+SDLLIB = libSDL.so
+SFMLLIB = libSFML.so
 
 COMPILEDHPP = nibblerpch.hpp
 
 ODIR = obj
 SDIR = src
+LDIR = lib
 
 IDIR = inc
 
 DEPS = Renderer.hpp Game.hpp
 
+OPENGLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(OPENGLSRC))
+SDLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(SDLSRC))
+SFMLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(SFMLSRC))
+
+OPENGLLIB := $(patsubst %, $(LDIR)/%, $(OPENGLLIB))
+SDLLIB := $(patsubst %, $(LDIR)/%, $(SDLLIB))
+SFMLLIB := $(patsubst %, $(LDIR)/%, $(SFMLLIB))
+
+OPENGLSRC := $(patsubst %, $(SDIR)/%, $(OPENGLSRC))
+SDLSRC := $(patsubst %, $(SDIR)/%, $(SDLSRC))
+SFMLSRC := $(patsubst %, $(SDIR)/%, $(SFMLSRC))
+
 OBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(FILES))
 OBJ := $(patsubst %.c, $(ODIR)/%.o, $(OBJ))
 SRC := $(patsubst %, $(SDIR)/%, $(FILES))
+
 DEPS := $(patsubst %, $(IDIR)/%, $(DEPS))
 PCH := $(patsubst %, %.gch, $(COMPILEDHPP))
 COMPILEDHPP := $(patsubst %, %, $(COMPILEDHPP))
@@ -46,22 +70,24 @@ GLFW:
 	@cmake glfw
 	@-make -s -C glfw
 
-$(NAME): $(ODIR) $(ODIR)/glad.o $(PCH) $(OBJ)
+$(OPENGLLIB): $(OPENGLOBJ)
+	@$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(OTHERFILES)
+
+$(NAME): $(ODIR) $(ODIR)/glad.o $(PCH) $(OBJ) $(OPENGLLIB)
 	@echo "$(CYAN)Linking\t\t$(GREEN)$(NAME)$(END)";
-	@$(CPPC) -o $(NAME) $(OBJ) $(CPPFLAGS) -I $(IDIR) $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+	@$(CPPC) -o $(NAME) $(OBJ) $(CPPFLAGS) -I $(IDIR) -L$(LDIR) -lOpengl $(OTHERFILES)
 
 %.hpp.gch: %.hpp
 	@echo "$(YELLOW)Compiling\t$(GREEN)$@$(END)";
 	$(CPPC) -o $@ $< $(CPPFLAGS) -I $(IDIR)
 
+$(ODIR)/glad.o: glad/src/glad.c $(DEPS) $(COMPILEDHPP)
+	@echo "$(CYAN)Compiling\t$(GREEN)$@$(END)";
+	@$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS) $(COMPILEDHPP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$@$(END)";
 	@$(CPPC) -c -o $@ $< $(CPPFLAGS) -I $(IDIR) -I . -include $(COMPILEDHPP)
-
-$(ODIR)/glad.o: glad/src/glad.c $(DEPS) $(COMPILEDHPP)
-	@echo "$(CYAN)Compiling\t$(GREEN)$@$(END)";
-	@$(CC) -c -o $@ $< $(CFLAGS)
 
 $(ODIR):
 	@echo "$(CYAN)Creating\t$(GREEN)$(ODIR)$(END)";
@@ -81,6 +107,9 @@ clean:
 fclean: clean
 	@echo "$(RED)Removing\t$(GREEN)$(NAME)$(END)";
 	@rm -rf $(NAME)
+	@rm -rf $(OPENGLLIB)
+	@rm -rf $(SDLLIB)
+	@rm -rf $(SFMLLIB)
 	@make clean -C glfw
 
 re: fclean all
