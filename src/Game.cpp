@@ -6,13 +6,12 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/03 11:16:52 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/04 14:57:25 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nibblerpch.hpp"
 #include "Game.hpp"
-
 
 t_milli Game::getCurrentTime()
 {
@@ -22,9 +21,12 @@ t_milli Game::getCurrentTime()
 }
 
 Game::Game(int width, int height, std::string name, int fps)
-	:m_FPS(fps), m_Name(name)
+	:m_FPS(fps), m_Name(name), m_DLLHandle(nullptr)
 {
-	m_Renderer = new Renderer(width, height, name);
+	LoadDLL("lib/libOpengl.so");
+	m_Renderer = m_CreateFun(width, height, name);
+	if (!m_Renderer)
+		throw std::exception();
 }
 
 Game::Game()
@@ -102,7 +104,7 @@ void Game::Render()
 
 void Game::Run()
 {
-	m_Renderer->SetClearColour({0, 0, 0, 1});
+	m_Renderer->SetClearColour({1, 1, 1, 1});
 	
 	x = 0;
 	y = 0;
@@ -131,5 +133,27 @@ void Game::Run()
 		if (m_Renderer->GetKey(NB_KEY_ESCAPE) == NB_PRESS)
 			m_Renderer->SetShouldClose(1);
 		m_Renderer->EndFrame();
+	}
+}
+
+void Game::LoadDLL(std::string const &path)
+{
+	if (m_DLLHandle)
+	{
+		dlclose(m_DLLHandle);
+	}
+	m_DLLHandle = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
+	char* lError = dlerror();
+	if (lError)
+	{
+		std::cout << "Error: " <<  lError << std::endl;
+		throw std::exception();
+	}
+	*(void **)(&m_CreateFun) = dlsym(m_DLLHandle, "CreateRenderer");
+	lError = dlerror();
+	if (lError)
+	{
+		std::cout << "Error: " <<  lError << std::endl;
+		throw std::exception();
 	}
 }

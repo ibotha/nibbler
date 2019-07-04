@@ -1,29 +1,17 @@
 #include "nibblerpch.hpp"
-#include "Renderer.hpp"
-#include <glad/glad.h>
-#define GL_SILENCE_DEPRECATION
-#include <GLFW/glfw3.h>
-
-struct GLData {
-	GLFWwindow *win;
-	GLuint shader;
-	GLuint vertexArray;
-	GLuint vertexBuffer;
-	GLuint indexBuffer;
-};
+#include "Renderers/OpenGLRenderer.hpp"
 
 static GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path);
 
-Renderer::Renderer()
+OpenGLRenderer::OpenGLRenderer()
 {
 }
 
-Renderer::Renderer(int width, int height, std::string name)
+OpenGLRenderer::OpenGLRenderer(int width, int height, std::string const &name)
 {
 	m_Width = width;
 	m_Height = height;
-	m_Data = new GLData;
-	GLData *data = static_cast<GLData*>(m_Data);
+	m_Name = name;
 	if (!glfwInit())
 	{
 		std::cout << "failed to init GLFW" << std::endl;
@@ -37,53 +25,52 @@ Renderer::Renderer(int width, int height, std::string name)
 	glfwSetErrorCallback([](int code, const char *message) {std::cout << "GLFW Error " << code << ": "<< message << std::endl;});
 
 
-	data->win = glfwCreateWindow(600, 600, name.c_str(), NULL, NULL);
-	if (data->win == nullptr)
+	m_Win = glfwCreateWindow(600, 600, name.c_str(), NULL, NULL);
+	if (m_Win == nullptr)
 	{
 		std::cout << "failed to init window" << std::endl;
 		throw InitFail();
 	}
-	glfwMakeContextCurrent(data->win);
+	glfwMakeContextCurrent(m_Win);
 	int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 	if (status == 0)
 	{
 		std::cout << "failed to init glad" << std::endl;
 		throw InitFail();
 	}
-	data->shader = LoadShaders("OpenGL.vertexshader.glsl", "OpenGL.fragmentshader.glsl");
-	glUseProgram(data->shader);
-	glfwSetInputMode(data->win, GLFW_STICKY_KEYS, GL_TRUE);
+	m_Shader = LoadShaders("OpenGL.vertexshader.glsl", "OpenGL.fragmentshader.glsl");
+	glUseProgram(m_Shader);
+	glfwSetInputMode(m_Win, GLFW_STICKY_KEYS, GL_TRUE);
 
-	glGenVertexArrays(1, &data->vertexArray);
-	glBindVertexArray(data->vertexArray);
-	glGenBuffers(1, &data->vertexBuffer);
-	glBindBuffer(GL_ARRAY_BUFFER, data->vertexBuffer);
-	glGenBuffers(1, &data->indexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, data->indexBuffer);
-	GLint loc = glGetUniformLocation(data->shader, "u_Dimentions");
+	glGenVertexArrays(1, &m_VertexArray);
+	glBindVertexArray(m_VertexArray);
+	glGenBuffers(1, &m_VertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+	glGenBuffers(1, &m_IndexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+	GLint loc = glGetUniformLocation(m_Shader, "u_Dimentions");
 	if (loc != -1)
 	{
-		std::cout << "setting" << std::endl;
 		glUniform2f(loc, width, height);
 	}
 	std::memset(m_Keys, 0, sizeof(int) * NB_KEY_LAST);
-	glfwSetWindowUserPointer(data->win, this);
+	glfwSetWindowUserPointer(m_Win, this);
 
-	glfwSetKeyCallback(data->win, [](GLFWwindow* window, int key, int scancode, int action, int mods)
+	glfwSetKeyCallback(m_Win, [](GLFWwindow* window, int key, int scancode, int action, int mods)
 	{
 		(void)scancode;
 		(void)mods;
-		Renderer& r = *(Renderer*)glfwGetWindowUserPointer(window);
+		OpenGLRenderer& r = *(OpenGLRenderer*)glfwGetWindowUserPointer(window);
 		r.SetKey(key, action);
 	});
 }
 
-Renderer::Renderer(const Renderer &rhs)
+OpenGLRenderer::OpenGLRenderer(const OpenGLRenderer &rhs)
 {
 	*this = rhs;
 }
 
-Renderer &Renderer::operator=(const Renderer &rhs)
+OpenGLRenderer &OpenGLRenderer::operator=(const OpenGLRenderer &rhs)
 {
 	if (this != &rhs)
 	{
@@ -92,29 +79,26 @@ Renderer &Renderer::operator=(const Renderer &rhs)
 	return *this;
 }
 
-Renderer::~Renderer()
+OpenGLRenderer::~OpenGLRenderer()
 {
-	GLData *data = static_cast<GLData*>(m_Data);
-	glfwDestroyWindow(data->win);
+	glfwDestroyWindow(m_Win);
 	glfwTerminate();
-	delete data;
 }
 
-void Renderer::GetInput()
+void OpenGLRenderer::GetInput()
 {
 	glfwPollEvents();
 }
 
-void Renderer::SetClearColour(const Color &c)
+void OpenGLRenderer::SetClearColour(const Color &c)
 {
 	glClearColor(c.r, c.g, c.b, c.a);
 }
 
-void Renderer::DrawSquare(int x, int y, const Color &c)
+void OpenGLRenderer::DrawSquare(int x, int y, const Color &c)
 {
 	GLfloat gx = x;
 	GLfloat gy = y;
-	GLData *data = static_cast<GLData*>(m_Data);
 	(void)c;
 	if (!(x < m_Width && x > -1 && y > -1 && y < m_Height))
 		return;
@@ -135,71 +119,68 @@ void Renderer::DrawSquare(int x, int y, const Color &c)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_index_buffer_data), g_index_buffer_data, GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, data->vertexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, data->indexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
 	glVertexAttribPointer(
-		0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		4 * 6,                  // stride
-		(void*)0            // array buffer offset
+		0,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		4 * 6,
+		(void*)0
 	);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(
-		1,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-		3,                  // size
-		GL_FLOAT,           // type
-		GL_FALSE,           // normalized?
-		4 * 6,                  // stride
-		(void*)(4 * 3)            // array buffer offset
+		1,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		4 * 6,
+		(void*)(4 * 3)
 	);
-	// Draw the triangle !
-	glUseProgram(data->shader);
+	glUseProgram(m_Shader);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 }
 
-void Renderer::BeginFrame()
+void OpenGLRenderer::BeginFrame()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
-void Renderer::EndFrame()
+void OpenGLRenderer::EndFrame()
 {
-	GLData *data = static_cast<GLData*>(m_Data);
-	glfwSwapBuffers(data->win);
+	glfwSwapBuffers(m_Win);
 }
 
-bool Renderer::ShouldClose()
+bool OpenGLRenderer::ShouldClose()
 {
-	GLData *data = static_cast<GLData*>(m_Data);
-	return glfwWindowShouldClose(data->win);
+	return glfwWindowShouldClose(m_Win);
 }
 
-int Renderer::GetWidth() const { return m_Width; }
-int Renderer::GetHeight() const { return m_Width; }
+int OpenGLRenderer::GetWidth() const { return m_Width; }
+int OpenGLRenderer::GetHeight() const { return m_Width; }
+std::string const &OpenGLRenderer::GetName() const { return m_Name; }
 
-uint32_t Renderer::GetKey(uint32_t key) const
+uint32_t OpenGLRenderer::GetKey(uint32_t key) const
 {
 	return m_Keys[key];
 }
 
-void Renderer::SetKey(uint32_t key, uint32_t val)
+void OpenGLRenderer::SetKey(uint32_t key, uint32_t val)
 {
 	m_Keys[key] = val;
 }
 
-void Renderer::SetShouldClose(int val)
+void OpenGLRenderer::SetShouldClose(int val)
 {
-	GLData *data = static_cast<GLData*>(m_Data);
-	glfwSetWindowShouldClose(data->win, val);
+	glfwSetWindowShouldClose(m_Win, val);
 }
 
-const char *Renderer::InitFail::what() const throw()
+const char *OpenGLRenderer::InitFail::what() const throw()
 {
-	return "Renderer Init Fail";
+	return "OpenGLRenderer Init Fail";
 }
 
 static GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path){
@@ -289,3 +270,14 @@ static GLuint LoadShaders(const char * vertex_file_path, const char * fragment_f
 
 	return ProgramID;
 }
+
+#ifdef __cplusplus
+
+extern "C" {
+	IRenderer *CreateRenderer(int width, int height, std::string const &name)
+	{
+		return (IRenderer*)(new OpenGLRenderer(width, height, name));
+	}
+}
+
+#endif // __cplusplus

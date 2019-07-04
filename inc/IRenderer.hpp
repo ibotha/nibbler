@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Renderer.hpp                                       :+:      :+:    :+:   */
+/*   IRenderer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/03 10:13:08 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/04 15:38:04 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,39 +161,32 @@ struct Color
 	float r, g, b, a;
 };
 
-class Renderer {
+class IRenderer {
 	public:
+		virtual ~IRenderer() {};
 
-		Renderer(int width, int height, std::string name);
-		Renderer(const Renderer &rhs);
-		Renderer &operator=(const Renderer &rhs);
-		~Renderer();
+		virtual void SetClearColour(const Color &c) = 0;
+		virtual void BeginFrame() = 0;
+		virtual void GetInput() = 0;
+		virtual void EndFrame() = 0;
 
-		void SetClearColour(const Color &c);
-		void BeginFrame();
-		void GetInput();
-		void EndFrame();
+		virtual void DrawSquare(int x, int y, const Color &c) = 0;
 
-		void DrawSquare(int x, int y, const Color &c);
+		virtual bool ShouldClose() = 0;
+		virtual void SetShouldClose(int val) = 0;
 
-		bool ShouldClose();
-		void SetShouldClose(int val);
-
-		uint32_t GetKey(uint32_t key) const;
-		void SetKey(uint32_t key, uint32_t val);
+		virtual uint32_t GetKey(uint32_t key) const = 0;
 
 		class InitFail : public std::exception {
 			const char *what() const throw();
 		};
 
-		int GetWidth() const;
-		int GetHeight() const;
+		virtual int GetWidth() const = 0;
+		virtual int GetHeight() const = 0;
+		virtual std::string const &GetName() const = 0;
+		virtual void SetKey(uint32_t key, uint32_t val) = 0;
+
 
 	private:
-		Renderer();
-		void *m_Data;
-		int m_Width;
-		int m_Height;
-		int m_Keys[NB_KEY_LAST];
 	protected:
 };
