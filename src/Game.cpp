@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   Game.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 08:57:54 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/05 11:10:25 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nibblerpch.hpp"
 #include "Game.hpp"
+#include "Snoekie.hpp"
 
 t_milli Game::getCurrentTime()
 {
@@ -101,6 +102,8 @@ void Game::Update()
 	y += yv;
 	x += xv;
 
+	s.Move({x, y, 0});
+
 	if (x > m_Renderer->GetWidth() - 1)
 		x = 0;
 	if (y > m_Renderer->GetHeight() - 1)
@@ -117,7 +120,12 @@ void Game::Update()
 
 void Game::Render()
 {
-	m_Renderer->DrawSquare(x, y, {1, 0, 0, 0});
+	auto snakes = s.getSnoekie();
+
+	for (auto x: snakes)
+	{
+		m_Renderer->DrawSquare(x.x, x.y, {255,0,0,255});
+	}
 }
 
 void Game::Run()
