@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 11:10:25 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/05 11:25:34 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,10 @@ void Game::Update()
 
 	if (m_Renderer->GetKey(NB_KEY_SPACE))
 	{
+	}
+	if (s.collision())
+	{
+		//Die
 	}
 }
 
