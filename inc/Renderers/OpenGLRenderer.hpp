@@ -6,7 +6,7 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/04 15:35:19 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/05 12:30:38 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ class OpenGLRenderer : public IRenderer {
 		virtual bool ShouldClose();
 		virtual void SetShouldClose(int val);
 
-		virtual uint32_t GetKey(uint32_t key) const;
+		virtual int32_t GetKey(int32_t key) const;
 
 		class InitFail : public std::exception {
 			const char *what() const throw();
@@ -43,7 +43,7 @@ class OpenGLRenderer : public IRenderer {
 		virtual int GetWidth() const;
 		virtual int GetHeight() const;
 		virtual std::string const &GetName() const;
-		virtual void SetKey(uint32_t key, uint32_t val);
+		virtual void SetKey(int32_t key, int32_t val);
 
 	private:
 	

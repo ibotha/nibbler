@@ -167,14 +167,18 @@ int OpenGLRenderer::GetWidth() const { return m_Width; }
 int OpenGLRenderer::GetHeight() const { return m_Width; }
 std::string const &OpenGLRenderer::GetName() const { return m_Name; }
 
-uint32_t OpenGLRenderer::GetKey(uint32_t key) const
+int32_t OpenGLRenderer::GetKey(int32_t key) const
 {
-	return m_Keys[key];
+	if (key > NB_KEY_UNKNOWN && key < NB_KEY_LAST)
+		return m_Keys[key];
+	else
+		return 0;
 }
 
-void OpenGLRenderer::SetKey(uint32_t key, uint32_t val)
+void OpenGLRenderer::SetKey(int32_t key, int32_t val)
 {
-	m_Keys[key] = val;
+	if (key > NB_KEY_UNKNOWN && key < NB_KEY_LAST)
+		m_Keys[key] = val;
 }
 
 void OpenGLRenderer::SetShouldClose(int val)

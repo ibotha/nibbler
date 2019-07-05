@@ -1,13 +1,13 @@
 #include "nibblerpch.hpp"
-#include "Renderers/OpenGLRenderer.hpp"
+#include "Renderers/SFMLRenderer.hpp"
 
 static GLuint LoadShaders(const char * vertex_file_path,const char * fragment_file_path);
 
-OpenGLRenderer::OpenGLRenderer()
+SFMLRenderer::SFMLRenderer()
 {
 }
 
-OpenGLRenderer::OpenGLRenderer(int width, int height, std::string const &name)
+SFMLRenderer::SFMLRenderer(int width, int height, std::string const &name)
 {
 	m_Width = width;
 	m_Height = height;
@@ -60,17 +60,17 @@ OpenGLRenderer::OpenGLRenderer(int width, int height, std::string const &name)
 	{
 		(void)scancode;
 		(void)mods;
-		OpenGLRenderer& r = *(OpenGLRenderer*)glfwGetWindowUserPointer(window);
+		SFMLRenderer& r = *(SFMLRenderer*)glfwGetWindowUserPointer(window);
 		r.SetKey(key, action);
 	});
 }
 
-OpenGLRenderer::OpenGLRenderer(const OpenGLRenderer &rhs)
+SFMLRenderer::SFMLRenderer(const SFMLRenderer &rhs)
 {
 	*this = rhs;
 }
 
-OpenGLRenderer &OpenGLRenderer::operator=(const OpenGLRenderer &rhs)
+SFMLRenderer &SFMLRenderer::operator=(const SFMLRenderer &rhs)
 {
 	if (this != &rhs)
 	{
@@ -79,7 +79,7 @@ OpenGLRenderer &OpenGLRenderer::operator=(const OpenGLRenderer &rhs)
 	return *this;
 }
 
-OpenGLRenderer::~OpenGLRenderer()
+SFMLRenderer::~SFMLRenderer()
 {
 	glDeleteBuffers(1, &m_IndexBuffer);
 	glDeleteBuffers(1, &m_VertexBuffer);
@@ -89,17 +89,17 @@ OpenGLRenderer::~OpenGLRenderer()
 	glfwTerminate();
 }
 
-void OpenGLRenderer::GetInput()
+void SFMLRenderer::GetInput()
 {
 	glfwPollEvents();
 }
 
-void OpenGLRenderer::SetClearColour(const Color &c)
+void SFMLRenderer::SetClearColour(const Color &c)
 {
 	glClearColor(c.r, c.g, c.b, c.a);
 }
 
-void OpenGLRenderer::DrawSquare(int x, int y, const Color &c)
+void SFMLRenderer::DrawSquare(int x, int y, const Color &c)
 {
 	GLfloat gx = x;
 	GLfloat gy = y;
@@ -148,43 +148,43 @@ void OpenGLRenderer::DrawSquare(int x, int y, const Color &c)
 	glDisableVertexAttribArray(1);
 }
 
-void OpenGLRenderer::BeginFrame()
+void SFMLRenderer::BeginFrame()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
-void OpenGLRenderer::EndFrame()
+void SFMLRenderer::EndFrame()
 {
 	glfwSwapBuffers(m_Win);
 }
 
-bool OpenGLRenderer::ShouldClose()
+bool SFMLRenderer::ShouldClose()
 {
 	return glfwWindowShouldClose(m_Win);
 }
 
-int OpenGLRenderer::GetWidth() const { return m_Width; }
-int OpenGLRenderer::GetHeight() const { return m_Width; }
-std::string const &OpenGLRenderer::GetName() const { return m_Name; }
+int SFMLRenderer::GetWidth() const { return m_Width; }
+int SFMLRenderer::GetHeight() const { return m_Width; }
+std::string const &SFMLRenderer::GetName() const { return m_Name; }
 
-uint32_t OpenGLRenderer::GetKey(uint32_t key) const
+int32_t SFMLRenderer::GetKey(int32_t key) const
 {
 	return m_Keys[key];
 }
 
-void OpenGLRenderer::SetKey(uint32_t key, uint32_t val)
+void SFMLRenderer::SetKey(int32_t key, int32_t val)
 {
 	m_Keys[key] = val;
 }
 
-void OpenGLRenderer::SetShouldClose(int val)
+void SFMLRenderer::SetShouldClose(int val)
 {
 	glfwSetWindowShouldClose(m_Win, val);
 }
 
-const char *OpenGLRenderer::InitFail::what() const throw()
+const char *SFMLRenderer::InitFail::what() const throw()
 {
-	return "OpenGLRenderer Init Fail";
+	return "SFMLRenderer Init Fail";
 }
 
 static GLuint LoadShaders(const char * vertex_file_path, const char * fragment_file_path){
@@ -280,7 +280,7 @@ static GLuint LoadShaders(const char * vertex_file_path, const char * fragment_f
 extern "C" {
 	IRenderer *CreateRenderer(int width, int height, std::string const &name)
 	{
-		return (IRenderer*)(new OpenGLRenderer(width, height, name));
+		return (IRenderer*)(new SFMLRenderer(width, height, name));
 	}
 }
 
