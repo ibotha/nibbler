@@ -107,10 +107,10 @@ void OpenGLRenderer::DrawSquare(int x, int y, const Color &c)
 	if (!(x < m_Width && x > -1 && y > -1 && y < m_Height))
 		return;
 	GLfloat g_vertex_buffer_data[] = {
-		gx    , gy    , 0, 0, 0, 1,
-		gx + 1, gy    , 0, 0, 0, 1,
-		gx + 1, gy + 1, 0, 0, 0, 1,
-		gx    , gy + 1, 0, 0, 0, 1
+		gx    , gy    , 0, 0, 1, 0,
+		gx + 1, gy    , 0, 0, 1, 0,
+		gx + 1, gy + 1, 0, 0, 1, 0,
+		gx    , gy + 1, 0, 0, 1, 0
 	};
 
 	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);

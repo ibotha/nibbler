@@ -6,11 +6,15 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/04 15:38:04 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/05 09:04:25 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
+#define SCREEN_W 600
+#define SCREEN_H 600
+
 #define NB_KEY_UNKNOWN            -1
 
 /* Printable keys */

@@ -6,7 +6,7 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/04 14:57:25 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/05 08:57:54 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_milli Game::getCurrentTime()
 }
 
 Game::Game(int width, int height, std::string name, int fps)
-	:m_FPS(fps), m_Name(name), m_DLLHandle(nullptr)
+	:m_FPS(fps), m_Width(width), m_Height(height),  m_Name(name), m_DLLHandle(nullptr)
 {
 	LoadDLL("lib/libOpengl.so");
 	m_Renderer = m_CreateFun(width, height, name);
@@ -59,6 +59,24 @@ void Game::GetInput()
 
 void Game::Update()
 {
+	if (m_Renderer->GetKey(NB_KEY_1) == NB_PRESS && !(yv < 0))
+	{
+		delete m_Renderer;
+		LoadDLL("lib/libOpengl.so");
+		m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+	}
+	if (m_Renderer->GetKey(NB_KEY_2) == NB_PRESS && !(yv < 0))
+	{
+		delete m_Renderer;
+		LoadDLL("lib/libSDL.so");
+		m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+	}
+	if (m_Renderer->GetKey(NB_KEY_3) == NB_PRESS && !(yv < 0))
+	{
+		delete m_Renderer;
+		LoadDLL("lib/libSFML.so");
+		m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+	}
 	if (m_Renderer->GetKey(NB_KEY_UP) == NB_PRESS && !(yv < 0))
 	{
 		xv = 0;

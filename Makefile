@@ -12,21 +12,22 @@ CFLAGS = $(CFLAGSOG) $(FLAGS)
 CPPFLAGS = $(CPPFLAGSOG) $(FLAGS)
 
 OPENGLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
-MLXCDEP = -framework OpenGL -lmlx
+SDLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+SFMLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 FILES = main.cpp Game.cpp
 
 OPENGLSRC = Renderers/OpenGLRenderer.cpp
 SDLSRC = Renderers/SDLRenderer.cpp
-MLXSRC = Renderers/MLXRenderer.cpp
+SFMLSRC = Renderers/SFMLRenderer.cpp
 
 OPENGLLIB = libOpengl.so
 SDLLIB = libSDL.so
-MLXLIB = libMLX.so
+SFMLLIB = libSFML.so
 
 OPENGLLIBDEP = Renderers/OpenGLRenderer.hpp
 SDLLIBDEP = Renderers/SDLRenderer.hpp
-MLXLIBDEP = Renderers/MLXRenderer.hpp
+SFMLLIBDEP = Renderers/SFMLRenderer.hpp
 
 COMPILEDHPP = nibblerpch.hpp
 
@@ -40,15 +41,19 @@ DEPS = IRenderer.hpp Game.hpp
 
 OPENGLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(OPENGLSRC))
 SDLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(SDLSRC))
-MLXOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(MLXSRC))
+SFMLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(SFMLSRC))
+
+OPENGLLIBDEP := $(patsubst %, $(IDIR)/%, $(OPENGLLIBDEP))
+SDLLIBDEP := $(patsubst %, $(IDIR)/%, $(SDLLIBDEP))
+SFMLLIBDEP := $(patsubst %, $(IDIR)/%, $(SFMLLIBDEP))
 
 OPENGLLIB := $(patsubst %, $(LDIR)/%, $(OPENGLLIB))
 SDLLIB := $(patsubst %, $(LDIR)/%, $(SDLLIB))
-MLXLIB := $(patsubst %, $(LDIR)/%, $(MLXLIB))
+SFMLLIB := $(patsubst %, $(LDIR)/%, $(SFMLLIB))
 
 OPENGLSRC := $(patsubst %, $(SDIR)/%, $(OPENGLSRC))
 SDLSRC := $(patsubst %, $(SDIR)/%, $(SDLSRC))
-MLXSRC := $(patsubst %, $(SDIR)/%, $(MLXSRC))
+SFMLSRC := $(patsubst %, $(SDIR)/%, $(SFMLSRC))
 
 OBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(FILES))
 OBJ := $(patsubst %.c, $(ODIR)/%.o, $(OBJ))
@@ -68,22 +73,26 @@ CYAN=\033[0;36m
 WHITE=\033[0;37m
 END=\033[0m
 
-all: $(ODIR) $(MLXLIB) $(OPENGLLIB) $(NAME)
+all: $(ODIR) $(PCH) $(SDLLIB) $(SFMLLIB) $(OPENGLLIB) $(NAME)
 
 GLFW:
 	@echo "$(CYAN)Making\t\t$(GREEN)GLFW$(END)";
 	@cmake glfw
-	@-make -s -C glfw
+	@-make -C glfw
 
 $(OPENGLLIB): $(OPENGLOBJ) GLFW $(ODIR)/glad.o $(OPENGLLIBDEP)
-	@echo "$(CYAN)Compiling\t$(GREEN)$(OPENGLLIB)$(END)";
-	@$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(OPENGLCDEP)
+	@echo "$(CYAN)Compiling\t$(GREEN)$(OPENGLLIB)$(END)"
+	$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(OPENGLCDEP)
 
-$(MLXLIB): $(MLXOBJ) $(MLXLIBDEP)
-	@echo "$(CYAN)Compiling\t$(GREEN)$(MLXLIB)$(END)";
-	@$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(MLXCDEP)
+$(SFMLLIB): $(SFMLOBJ) GLFW $(ODIR)/glad.o $(SFMLLIBDEP)
+	@echo "$(CYAN)Compiling\t$(GREEN)$(SFMLLIB)$(END)"
+	@$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(SFMLCDEP)
 
-$(NAME): $(ODIR) $(PCH) $(OBJ)
+$(SDLLIB): $(SDLOBJ) GLFW $(ODIR)/glad.o $(SDLLIBDEP)
+	@echo "$(CYAN)Compiling\t$(GREEN)$(SDLLIB)$(END)"
+	@$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(SDLCDEP)
+
+$(NAME): $(ODIR) $(OBJ)
 	@echo "$(CYAN)Linking\t\t$(GREEN)$(NAME)$(END)";
 	$(CPPC) -o $(NAME) $(OBJ) $(CPPFLAGS) -I $(IDIR) -L$(LDIR)
 
@@ -126,4 +135,5 @@ re: fclean all
 
 shallowre: clean all
 
-.PHONY: re clean all fclean GLFW
+.PHONY: re clean all fclean GLFW $(ODIR)
+

@@ -6,7 +6,7 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:12:47 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/04 14:57:17 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/05 08:56:34 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ private:
 	t_milli getCurrentTime();
 	
 	int m_FPS;
+	int m_Width;
+	int m_Height;
 	std::string m_Name;
 	IRenderer *m_Renderer;
 	void *m_DLLHandle;
