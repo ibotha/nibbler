@@ -73,12 +73,12 @@ CYAN=\033[0;36m
 WHITE=\033[0;37m
 END=\033[0m
 
-all: $(ODIR) $(PCH) $(SDLLIB) $(SFMLLIB) $(OPENGLLIB) $(NAME)
+all: $(ODIR) $(LDIR) $(PCH) $(SDLLIB) $(SFMLLIB) $(OPENGLLIB) $(NAME)
 
 GLFW:
 	@echo "$(CYAN)Making\t\t$(GREEN)GLFW$(END)";
-	@cmake glfw
-	@-make -C glfw
+	@cd glfw && cmake .
+	@make -C glfw
 
 SDL2: SDL2.tar.gz
 	mkdir -p SDL2
@@ -90,17 +90,17 @@ SDL2.tar.gz:
 	curl -o SDL2.tar.gz https://www.libsdl.org/release/SDL2-2.0.9.tar.gz
 
 
-$(OPENGLLIB): $(OPENGLOBJ) GLFW $(ODIR)/glad.o $(OPENGLLIBDEP)
+$(OPENGLLIB): GLFW $(ODIR)/glad.o $(OPENGLOBJ) $(OPENGLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(OPENGLLIB)$(END)"
-	$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(OPENGLCDEP)
+	$(CPPC) -shared $(OPENGLOBJ) -o $@ $(CPPFLAGS) $(OPENGLCDEP)
 
-$(SFMLLIB): $(SFMLOBJ) GLFW $(ODIR)/glad.o $(SFMLLIBDEP)
+$(SFMLLIB): GLFW $(ODIR)/glad.o $(SFMLOBJ) $(SFMLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(SFMLLIB)$(END)"
-	@$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(SFMLCDEP)
+	@$(CPPC) -shared $(SFMLOBJ) -o $@ $(CPPFLAGS) $(SFMLCDEP)
 
-$(SDLLIB): $(SDLOBJ) SDL2 $(SDLLIBDEP)
+$(SDLLIB): SDL2 $(SDLOBJ) $(SDLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(SDLLIB)$(END)"
-	@$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(SDLCDEP)
+	@$(CPPC) -shared $(SDLOBJ) -o $@ $(CPPFLAGS) $(SDLCDEP)
 
 $(NAME): $(ODIR) $(OBJ)
 	@echo "$(CYAN)Linking\t\t$(GREEN)$(NAME)$(END)";
@@ -117,6 +117,9 @@ $(ODIR)/glad.o: glad/src/glad.c $(DEPS) $(COMPILEDHPP)
 $(ODIR)/%.o: $(SDIR)/%.cpp $(DEPS) $(COMPILEDHPP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$@$(END)";
 	@$(CPPC) -c -o $@ $< $(CPPFLAGS) -I $(IDIR) -I . -include $(COMPILEDHPP)
+
+$(LDIR):
+	mkdir -p $(LDIR)
 
 $(ODIR):
 	@echo "$(CYAN)Creating\t$(GREEN)$(ODIR)$(END)";
