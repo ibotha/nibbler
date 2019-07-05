@@ -80,6 +80,14 @@ GLFW:
 	@cmake glfw
 	@-make -C glfw
 
+SDL2: SDL2.tar.gz
+	tar -xf SDL2.tar.gz
+	cd SDL2-* && cmake .
+
+SDL2.tar.gz:
+	curl -o SDL2.tar.gz https://www.libsdl.org/release/SDL2-2.0.9.tar.gz
+
+
 $(OPENGLLIB): $(OPENGLOBJ) GLFW $(ODIR)/glad.o $(OPENGLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(OPENGLLIB)$(END)"
 	$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(OPENGLCDEP)
