@@ -6,7 +6,7 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 09:04:25 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/05 12:28:26 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ class IRenderer {
 		virtual bool ShouldClose() = 0;
 		virtual void SetShouldClose(int val) = 0;
 
-		virtual uint32_t GetKey(uint32_t key) const = 0;
+		virtual int32_t GetKey(int32_t key) const = 0;
 
 		class InitFail : public std::exception {
 			const char *what() const throw();
@@ -188,7 +188,7 @@ class IRenderer {
 		virtual int GetWidth() const = 0;
 		virtual int GetHeight() const = 0;
 		virtual std::string const &GetName() const = 0;
-		virtual void SetKey(uint32_t key, uint32_t val) = 0;
+		virtual void SetKey(int32_t key, int32_t val) = 0;
 
 
 	private:
