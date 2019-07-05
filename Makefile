@@ -6,13 +6,13 @@ NAME = nibbler
 CFLAGSOG = 
 CPPFLAGSOG = -std=c++17
 
-FLAGS = -Wall -Werror -Wextra -I glfw/include -I glad/include
+FLAGS = -Wall -Werror -Wextra -I glfw/include -I glad/include -I SDL2/include
 
 CFLAGS = $(CFLAGSOG) $(FLAGS)
 CPPFLAGS = $(CPPFLAGSOG) $(FLAGS)
 
 OPENGLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
-SDLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+SDLCDEP = SDL2/build/libSDL2main.a
 SFMLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 FILES = main.cpp Game.cpp
@@ -80,6 +80,16 @@ GLFW:
 	@cmake glfw
 	@-make -C glfw
 
+SDL2: SDL2.tar.gz
+	mkdir -p SDL2
+	mkdir -p SDL2/build
+	tar -xf SDL2.tar.gz -C SDL2 --strip-components 1
+	cd SDL2/build && cmake .. && make
+
+SDL2.tar.gz:
+	curl -o SDL2.tar.gz https://www.libsdl.org/release/SDL2-2.0.9.tar.gz
+
+
 $(OPENGLLIB): $(OPENGLOBJ) GLFW $(ODIR)/glad.o $(OPENGLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(OPENGLLIB)$(END)"
 	$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(OPENGLCDEP)
@@ -88,7 +98,7 @@ $(SFMLLIB): $(SFMLOBJ) GLFW $(ODIR)/glad.o $(SFMLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(SFMLLIB)$(END)"
 	@$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(SFMLCDEP)
 
-$(SDLLIB): $(SDLOBJ) GLFW $(ODIR)/glad.o $(SDLLIBDEP)
+$(SDLLIB): $(SDLOBJ) SDL2 $(SDLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(SDLLIB)$(END)"
 	@$(CPPC) -shared $< -o $@ $(CPPFLAGS) $(SDLCDEP)
 
@@ -130,10 +140,12 @@ fclean: clean
 	@rm -rf $(SDLLIB)
 	@rm -rf $(SFMLLIB)
 	@make clean -C glfw
+	@rm -rf SDL2
+	@rm -rf SDL2.tar.gz
 
 re: fclean all
 
 shallowre: clean all
 
-.PHONY: re clean all fclean GLFW $(ODIR)
+.PHONY: re clean all fclean GLFW $(ODIR) SDL2
 

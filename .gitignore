@@ -5,3 +5,6 @@ obj
 *.gch
 nibbler
 .vscode
+*.so
+SDL2
+SDL2.tar.gz
