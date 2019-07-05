@@ -1,28 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   OpenGLRenderer.hpp                                 :+:      :+:    :+:   */
+/*   SDLRenderer.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/04 15:35:19 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/05 10:56:33 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "IRenderer.hpp"
-#include <glad/glad.h>
-#define GL_SILENCE_DEPRECATION
-#include <GLFW/glfw3.h>
+#include "SDL.h"
 
-class OpenGLRenderer : public IRenderer {
+class SDLRenderer : public IRenderer {
 	public:
 
-		OpenGLRenderer(int width, int height, std::string const &name);
-		OpenGLRenderer(const OpenGLRenderer &rhs);
-		virtual OpenGLRenderer &operator=(const OpenGLRenderer &rhs);
-		virtual ~OpenGLRenderer();
+		SDLRenderer(int width, int height, std::string const &name);
+		SDLRenderer(const SDLRenderer &rhs);
+		virtual SDLRenderer &operator=(const SDLRenderer &rhs);
+		virtual ~SDLRenderer();
 
 		virtual void SetClearColour(const Color &c);
 		virtual void BeginFrame();
@@ -47,16 +45,15 @@ class OpenGLRenderer : public IRenderer {
 
 	private:
 	
-		OpenGLRenderer();
+		SDLRenderer();
 		int m_Width;
 		int m_Height;
 		int m_Keys[NB_KEY_LAST];
 		std::string m_Name;
-		GLFWwindow *m_Win;
-		GLuint m_Shader;
-		GLuint m_VertexArray;
-		GLuint m_VertexBuffer;
-		GLuint m_IndexBuffer;
+		SDL_Window *win;
+		SDL_Renderer* ren;
+		int m_ShouldClose;
+		Color m_ClearColor;
 
 	protected:
 };
