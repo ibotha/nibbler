@@ -6,13 +6,14 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:33:10 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/05 13:01:46 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/05 17:03:50 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 
 #include <vector>
+#include "IEntity.hpp"
 
 #define LIFESPAN 10
 
@@ -29,7 +30,7 @@ struct Food
 	double	LifeSpan;
 };
 
-class Snoekie
+class Snoekie: public IEntity
 {
 	public:
 		Snoekie(void);
@@ -37,9 +38,11 @@ class Snoekie
 		Snoekie(Snoekie const&);
 		Snoekie &operator=(const Snoekie&);
 		
+		virtual void Render(IRenderer *);
+		virtual void Update(IRenderer *);
 
 		bool	eatFood(void);
-		bool	collision(void);
+		bool	collision(Vec);
 
 		void	makeFood(void);
 		void	grow(void);
@@ -49,9 +52,9 @@ class Snoekie
 		std::vector<Vec>	getSnoekie(void);
 
 	private:
-		std::vector<Vec> Body;
-		Food			food;
-		Vec				dir;
+		std::vector<Vec>	Body;
+		Vec					dir;
+		IRenderer 			*m_Renderer;
 
 		
 	protected:	

@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 13:10:14 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/05 17:07:27 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ void Game::Update()
 
 		
 
-	s.Move(Vec{static_cast<int>(xv), static_cast<int>(yv), 0});
 
 	if (x > m_Renderer->GetWidth() - 1)
 		x = 0;
@@ -118,20 +117,11 @@ void Game::Update()
 	if (m_Renderer->GetKey(NB_KEY_SPACE))
 	{
 	}
-	if (s.collision())
-	{
-		//Die
-	}
 }
 
 void Game::Render()
 {
-	auto snakes = s.getSnoekie();
-
-	for (auto x: snakes)
-	{
-		m_Renderer->DrawSquare(x.x, x.y, {1,0,0,1});
-	}
+	s.Render(m_Renderer);
 }
 
 void Game::Run()
