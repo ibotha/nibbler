@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:33:10 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/05 11:24:49 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/05 13:01:46 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ class Snoekie
 		void	shrink(void);
 		void	Move(Vec pos);
 		 
-		auto	getSnoekie(void);
+		std::vector<Vec>	getSnoekie(void);
 
 	private:
 		std::vector<Vec> Body;

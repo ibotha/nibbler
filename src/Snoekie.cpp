@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:50:11 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/05 11:24:46 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/05 13:12:13 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ Snoekie 	&Snoekie::operator=(const Snoekie& rhs) {
 }
 
 void 		Snoekie::makeFood(void) {
-	if (eatFood)
+	if (eatFood())
 	{
 		Vec newPos;
 		
@@ -69,7 +69,7 @@ void 		Snoekie::grow(void) {
 }
 
 void 		Snoekie::shrink(void) {
-		if (collision)
+		if (collision())
 			this->Body.pop_back();
 }
 
@@ -90,20 +90,13 @@ bool 		Snoekie::collision(void) {
 	return false;
 }
 
-auto		Snoekie::getSnoekie(void) { return this->Body; }
+std::vector<Vec>		Snoekie::getSnoekie(void) { return this->Body; }
 
 void 		Snoekie::Move(Vec dir) {
     Vec		body;
 
 	body = this->Body.back();
-	this->Body.pop_back();
-	std::vector<Vec> cpy;
-	cpy = this->Body;
-	this->Body.clear();
-	body.x += dir.x;
-	body.y += dir.y;
-	body.z += dir.z;
-	this->Body.push_back(body);
-	for(auto b: cpy)
-		this->Body.push_back(b);
+	Vec N = {body.x + dir.x, body.y + dir.y, 0};
+	this->Body.push_back(N);
+	this->Body.erase(this->Body.begin());
 }

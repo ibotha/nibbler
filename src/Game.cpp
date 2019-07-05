@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 11:25:34 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/05 13:10:14 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,9 @@ void Game::Update()
 	y += yv;
 	x += xv;
 
-	s.Move({x, y, 0});
+		
+
+	s.Move(Vec{static_cast<int>(xv), static_cast<int>(yv), 0});
 
 	if (x > m_Renderer->GetWidth() - 1)
 		x = 0;
@@ -128,7 +130,7 @@ void Game::Render()
 
 	for (auto x: snakes)
 	{
-		m_Renderer->DrawSquare(x.x, x.y, {255,0,0,255});
+		m_Renderer->DrawSquare(x.x, x.y, {1,0,0,1});
 	}
 }
 

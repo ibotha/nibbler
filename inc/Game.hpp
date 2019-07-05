@@ -6,11 +6,12 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:12:47 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 11:05:21 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/05 13:00:52 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "IRenderer.hpp"
+#include "Snoekie.hpp"
 
 typedef std::chrono::milliseconds t_milli;
 typedef IRenderer *(*fun_t)(int, int, std::string const &);
