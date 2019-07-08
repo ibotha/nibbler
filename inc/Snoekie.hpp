@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:33:10 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/05 17:03:50 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 08:21:28 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,6 @@ struct	Vec
 	int		z;
 };
 
-struct Food
-{
-	Vec 	pos;
-	double	LifeSpan;
-};
-
 class Snoekie: public IEntity
 {
 	public:
@@ -37,9 +31,9 @@ class Snoekie: public IEntity
 		~Snoekie(void);
 		Snoekie(Snoekie const&);
 		Snoekie &operator=(const Snoekie&);
-		
-		virtual void Render(IRenderer *);
-		virtual void Update(IRenderer *);
+
+		virtual void	Render(IRenderer*) const;
+		virtual void	Update(IRenderer*) const;
 
 		bool	eatFood(void);
 		bool	collision(Vec);
@@ -53,7 +47,6 @@ class Snoekie: public IEntity
 
 	private:
 		std::vector<Vec>	Body;
-		Vec					dir;
 		IRenderer 			*m_Renderer;
 
 		
