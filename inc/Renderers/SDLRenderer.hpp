@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SDLRenderer.hpp                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 12:28:51 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/08 20:26:25 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ class SDLRenderer : public IRenderer {
 		virtual void EndFrame();
 
 		virtual void DrawSquare(int x, int y, const Color &c);
+		virtual void PrintText(int x, int y, std::string string);
 
 		virtual bool ShouldClose();
 		virtual void SetShouldClose(int val);

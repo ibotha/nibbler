@@ -148,6 +148,17 @@ void OpenGLRenderer::DrawSquare(int x, int y, const Color &c)
 	glDisableVertexAttribArray(1);
 }
 
+void OpenGLRenderer::PrintText(int x, int y, std::string string)
+{
+	int		l = strlen(string.c_str());
+	char	*_str = string.c_str();
+	glRasterPos2i(x, y);
+	for (int i = 0; i < l; i++)
+	{
+		gluBitmapCharacter(GLU_BITMAP_TIMES_ROMAN_24, _str[i]);
+	}
+}
+
 void OpenGLRenderer::BeginFrame()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );

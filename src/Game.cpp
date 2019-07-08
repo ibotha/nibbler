@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 16:32:51 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 20:06:43 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_milli Game::getCurrentTime()
 }
 
 Game::Game(int width, int height, std::string name, int fps)
-	:m_FPS(fps), m_Width(width), m_Height(height),  m_Name(name), m_DLLHandle(nullptr)
+	:m_FPS(fps), m_Width(width), m_Height(height),  m_Name(name), m_DLLHandle(nullptr), score(0)
 {
 	LoadDLL("lib/libOpengl.so");
 	m_Renderer = m_CreateFun(width, height, name);
@@ -118,6 +118,7 @@ void Game::Update()
 	bool overFood = (f) ? s.collision(f) : false;
 	if (overFood)
 	{
+		this->score++;
 		delete f;
 		f = nullptr;
 	}
@@ -142,6 +143,7 @@ void Game::Render()
 {
 	s.Render(m_Renderer);
 	f->Render(m_Renderer);
+	//RenderScore
 }
 
 void Game::Run()

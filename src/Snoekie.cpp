@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:50:11 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 16:31:38 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 20:17:09 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,16 +76,18 @@ void					Snoekie::Update(IRenderer *render)
 {
 	Vec<int> Head = this->Body.back();
 	if (
-		Head.getX() < 0 || Head.getY() < 0 ||
-		Head.getX() >= render->GetWidth() || Head.getY() >= render->GetHeight()
+		Head.getX() < 0 ||
+		Head.getY() < 0 ||
+		Head.getX() >= render->GetWidth() ||
+		Head.getY() >= render->GetHeight()
 		)
 		Game::Get()->KillSnake();
 }
 
 bool					Snoekie::collision(IEntity *ent) const
 {
-	Vec<int> head = this->Body.back();
 	if (!ent) return false;
+	Vec<int> head = this->Body.back();
 	return (ent->inBounds(head));
 }
 

@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:12:47 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 16:30:14 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 19:48:18 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ private:
 	static Game *s_Instance;
 	Snoekie s;
 	Food	*f;
+	int		score;
 
 	Game();
 	t_milli getCurrentTime();

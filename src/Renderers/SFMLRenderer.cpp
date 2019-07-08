@@ -148,6 +148,13 @@ void SFMLRenderer::DrawSquare(int x, int y, const Color &c)
 	glDisableVertexAttribArray(1);
 }
 
+void SFMLRenderer::PrintText(int x, int y, std::string string)
+{
+	(void)x;
+	(void)y;
+	(void)string;
+}
+
 void SFMLRenderer::BeginFrame()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
