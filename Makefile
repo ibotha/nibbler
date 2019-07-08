@@ -15,7 +15,7 @@ OPENGLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework Open
 SDLCDEP = SDL2/build/libSDL2main.a SDL2/build/libSDL2.a -framework AudioToolbox -framework CoreVideo -framework Carbon -framework ForceFeedback -framework IOKit -framework Cocoa -framework CoreAudio -liconv -lm  -Wl,-current_version,10.0.0 -Wl,-compatibility_version,1.0.0 -Wl,-undefined,error
 SFMLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
-FILES = main.cpp Game.cpp Snoekie.cpp
+FILES = main.cpp Game.cpp Snoekie.cpp Food.cpp
 
 OPENGLSRC = Renderers/OpenGLRenderer.cpp
 SDLSRC = Renderers/SDLRenderer.cpp
@@ -37,7 +37,7 @@ LDIR = lib
 
 IDIR = inc
 
-DEPS = IRenderer.hpp Game.hpp Snoekie.hpp IEntity.hpp
+DEPS = IRenderer.hpp Game.hpp Snoekie.hpp IEntity.hpp Vec.hpp Food.hpp
 
 OPENGLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(OPENGLSRC))
 SDLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(SDLSRC))

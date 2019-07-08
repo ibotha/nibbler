@@ -6,12 +6,13 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:12:47 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 13:00:52 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 14:51:10 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "IRenderer.hpp"
 #include "Snoekie.hpp"
+#include "Food.hpp"
 
 typedef std::chrono::milliseconds t_milli;
 typedef IRenderer *(*fun_t)(int, int, std::string const &);
@@ -34,6 +35,8 @@ public:
 
 private:
 	Snoekie s;
+	Food	*f;
+
 	Game();
 	t_milli getCurrentTime();
 	

@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 08:38:42 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 15:05:12 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Game::Game(int width, int height, std::string name, int fps)
 }
 
 Game::Game()
-{
+{;
 }
 
 Game::Game(const Game &rhs)
@@ -102,9 +102,16 @@ void Game::Update()
 	y += yv;
 	x += xv;
 
-		
-
-	s.Move({static_cast<int>(xv), static_cast<int>(yv), 0});
+	if (f == nullptr)
+		f = new Food(Vec(rand() % m_Width, rand() % m_Height, 0));
+	bool overFood = (f) ? s.collision(f) : false;
+	if (overFood)
+	{
+	//	s.grow();
+		delete f;
+		// f = nullptr;
+	}
+	s.Move({static_cast<int>(xv), static_cast<int>(yv), 0}, overFood);
 	if (x > m_Renderer->GetWidth() - 1)
 		x = 0;
 	if (y > m_Renderer->GetHeight() - 1)
@@ -113,7 +120,6 @@ void Game::Update()
 		x = m_Renderer->GetWidth();
 	if (y < 0)
 		y = m_Renderer->GetHeight();
-
 	if (m_Renderer->GetKey(NB_KEY_SPACE))
 	{
 	}
@@ -122,6 +128,7 @@ void Game::Update()
 void Game::Render()
 {
 	s.Render(m_Renderer);
+	f->Render(m_Renderer);
 }
 
 void Game::Run()
