@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/08 08:50:35 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 10:17:38 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 16:10:04 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ class Food: public IEntity
 		virtual void Render(IRenderer*) const;
 		virtual void Update(IRenderer*);
 		virtual bool collision(IEntity*) const;
-		virtual bool inBounds(Vec<int>) const;
+		virtual bool inBounds(const Vec<int>&) const;
 
 	private:
 		float	LifeSpan;

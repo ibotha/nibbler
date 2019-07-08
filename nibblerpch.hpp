@@ -4,6 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
+#include <random>
 
 #define WIDTH 50
 #define HEIGHT 50

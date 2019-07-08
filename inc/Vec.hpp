@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/08 09:04:20 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 11:27:43 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 16:12:15 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ class Vec
 			}
 			return *this;
 		};
-		bool operator!=(const Vec &rhs)
+		bool operator!=(const Vec &rhs) const
 		{
 			return (
 				this->x != rhs.getX() && 
@@ -38,11 +38,11 @@ class Vec
 				this->z != rhs.getZ()
 				);
 		};
-		bool operator==(const Vec &rhs)
+		bool operator==(const Vec &rhs) const
 		{
 			return (
-				this->x == rhs.getX() && 
-				this->y == rhs.getY() && 
+				this->x == rhs.getX() &&
+				this->y == rhs.getY() &&
 				this->z == rhs.getZ()
 				);
 		};

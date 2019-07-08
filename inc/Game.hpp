@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:12:47 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 14:51:10 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 16:30:14 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,20 @@ public:
 	Game &operator=(const Game &);
 	~Game();
 
+	static Game *Get();
+
 	void GetInput();
 	void Update();
 	void Render();
+
+	void KillSnake();
 
 	void LoadDLL(std::string const &path);
 
 	void Run();
 
 private:
+	static Game *s_Instance;
 	Snoekie s;
 	Food	*f;
 

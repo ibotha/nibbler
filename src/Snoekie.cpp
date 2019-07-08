@@ -6,12 +6,13 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:50:11 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 15:06:29 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 16:31:38 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "nibblerpch.hpp"
 #include "Snoekie.hpp"
-#include <iostream>
+#include "Game.hpp"
 
 Snoekie::Snoekie(void)
 {
@@ -73,7 +74,12 @@ void					Snoekie::Render(IRenderer *render) const
 
 void					Snoekie::Update(IRenderer *render)
 {
-	(void)render;
+	Vec<int> Head = this->Body.back();
+	if (
+		Head.getX() < 0 || Head.getY() < 0 ||
+		Head.getX() >= render->GetWidth() || Head.getY() >= render->GetHeight()
+		)
+		Game::Get()->KillSnake();
 }
 
 bool					Snoekie::collision(IEntity *ent) const
@@ -83,7 +89,7 @@ bool					Snoekie::collision(IEntity *ent) const
 	return (ent->inBounds(head));
 }
 
-bool					Snoekie::inBounds(Vec<int> pos) const
+bool					Snoekie::inBounds(const Vec<int> &pos) const
 {
 	Vec<int> head = this->Body.back();
 	return (head == pos);

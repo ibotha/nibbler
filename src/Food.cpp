@@ -6,10 +6,11 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/08 08:55:52 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 14:58:15 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 16:20:50 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "nibblerpch.hpp"
 #include "Food.hpp"
 
 Food::Food(void)
@@ -18,10 +19,10 @@ Food::Food(void)
 	this->LifeSpan = 30.0f;
 }
 
-Food::Food(Vec<int> Limits)
+Food::Food(Vec<int> pos)
 {
 	this->respawn = true;
-	this->Limits = Limits;
+	this->pos = pos;
 	this->LifeSpan = 30.f;
 }
 
@@ -54,7 +55,7 @@ bool	Food::collision(IEntity *ent) const
 	return (ent->inBounds(this->pos));
 }
 
-bool	Food::inBounds(Vec<int> pos) const
+bool	Food::inBounds(const Vec<int> &pos) const
 {
-	return (static_cast<Vec<int>>(this->pos) == pos);
+	return (this->pos == pos);
 }

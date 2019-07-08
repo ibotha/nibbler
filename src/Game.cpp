@@ -6,13 +6,16 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 15:05:12 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 16:32:23 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nibblerpch.hpp"
 #include "Game.hpp"
 #include "Snoekie.hpp"
+#include <random>
+
+Game *Game::s_Instance = new Game(50, 50, "Nibbler", 10);
 
 t_milli Game::getCurrentTime()
 {
@@ -31,7 +34,17 @@ Game::Game(int width, int height, std::string name, int fps)
 }
 
 Game::Game()
-{;
+{
+}
+
+Game *Game::Get()
+{
+	return s_Instance;
+}
+
+void Game::KillSnake()
+{
+	
 }
 
 Game::Game(const Game &rhs)
@@ -102,15 +115,14 @@ void Game::Update()
 	y += yv;
 	x += xv;
 
-	if (f == nullptr)
-		f = new Food(Vec(rand() % m_Width, rand() % m_Height, 0));
 	bool overFood = (f) ? s.collision(f) : false;
 	if (overFood)
 	{
-	//	s.grow();
 		delete f;
-		// f = nullptr;
+		f = nullptr;
 	}
+	if (f == nullptr)
+		f = new Food(Vec((rand() % (m_Width)), (rand() % (m_Height)), 0));
 	s.Move({static_cast<int>(xv), static_cast<int>(yv), 0}, overFood);
 	if (x > m_Renderer->GetWidth() - 1)
 		x = 0;
@@ -123,6 +135,7 @@ void Game::Update()
 	if (m_Renderer->GetKey(NB_KEY_SPACE))
 	{
 	}
+	s.Update(m_Renderer);
 }
 
 void Game::Render()

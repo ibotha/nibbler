@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:33:10 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 14:57:38 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 16:10:28 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ class Snoekie: public IEntity
 		virtual void Render(IRenderer*) const;
 		virtual void Update(IRenderer*);
 		virtual bool collision(IEntity*) const;
-		virtual bool inBounds(Vec<int>) const;
+		virtual bool inBounds(const Vec<int>&) const;
 
 		bool	eatFood(Vec<int>);
 

@@ -21,5 +21,5 @@ class IEntity
 		virtual void Render(IRenderer *) const = 0;
 		virtual void Update(IRenderer *) = 0;
 		virtual bool collision(IEntity*) const = 0;
-		virtual bool inBounds(Vec<int>) const = 0;
+		virtual bool inBounds(const Vec<int>&) const = 0;
 };
