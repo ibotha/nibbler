@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 20:06:43 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 20:53:23 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,12 @@ void Game::Update()
 
 void Game::Render()
 {
+	std::ostream str;
+	
+	str << "Score :" << this->score;
 	s.Render(m_Renderer);
 	f->Render(m_Renderer);
+	m_Renderer->PrintText(10, 10, std::to_string(str));
 	//RenderScore
 }
 

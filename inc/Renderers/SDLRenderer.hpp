@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 20:26:25 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 20:46:43 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ class SDLRenderer : public IRenderer {
 		SDL_Renderer* ren;
 		int m_ShouldClose;
 		Color m_ClearColor;
-
 	protected:
 };
 
