@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:33:10 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 08:21:28 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 08:35:18 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,10 @@ class Snoekie: public IEntity
 		Snoekie(Snoekie const&);
 		Snoekie &operator=(const Snoekie&);
 
-		virtual void	Render(IRenderer*) const;
-		virtual void	Update(IRenderer*) const;
+		virtual void Render(IRenderer*) const;
+		virtual void Update(IRenderer*) const;
 
-		bool	eatFood(void);
+		bool	eatFood(Vec);
 		bool	collision(Vec);
 
 		void	makeFood(void);

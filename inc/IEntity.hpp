@@ -17,7 +17,7 @@
 class IEntity
 {
 	public:
-		~IEntity();
+		~IEntity(){};
 		virtual void Render(IRenderer *) const = 0;
 		virtual void Update(IRenderer *) const = 0;
 };

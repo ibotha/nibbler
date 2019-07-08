@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 17:07:27 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 08:38:42 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void Game::Update()
 
 		
 
-
+	s.Move({static_cast<int>(xv), static_cast<int>(yv), 0});
 	if (x > m_Renderer->GetWidth() - 1)
 		x = 0;
 	if (y > m_Renderer->GetHeight() - 1)

@@ -37,7 +37,7 @@ LDIR = lib
 
 IDIR = inc
 
-DEPS = IRenderer.hpp Game.hpp Snoekie.hpp
+DEPS = IRenderer.hpp Game.hpp Snoekie.hpp IEntity.hpp
 
 OPENGLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(OPENGLSRC))
 SDLOBJ := $(patsubst %.cpp, $(ODIR)/%.o, $(SDLSRC))
