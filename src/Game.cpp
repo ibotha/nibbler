@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 16:32:23 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 16:32:51 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ Game *Game::Get()
 
 void Game::KillSnake()
 {
-	
+	m_Renderer->SetShouldClose(1);
 }
 
 Game::Game(const Game &rhs)
