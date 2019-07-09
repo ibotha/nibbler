@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/08 09:04:20 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 16:12:15 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/09 14:16:03 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ class Vec
 		Vec(T x, T y, T z): x(x), y(y), z(z){};
 		Vec(const Vec &cpy) { *this = cpy; };
 		~Vec(){};
-		Vec &operator=(const Vec& cpy) 
+		Vec &operator=(const Vec& cpy)
 		{
 			if (this != &cpy)
 			{
@@ -33,8 +33,8 @@ class Vec
 		bool operator!=(const Vec &rhs) const
 		{
 			return (
-				this->x != rhs.getX() && 
-				this->y != rhs.getY() && 
+				this->x != rhs.getX() &&
+				this->y != rhs.getY() &&
 				this->z != rhs.getZ()
 				);
 		};
@@ -46,6 +46,27 @@ class Vec
 				this->z == rhs.getZ()
 				);
 		};
+
+		Vec operator+(const Vec &v)
+		{
+			return Vec<T>(x + v.x, y + v.y, z + v.z);
+		}
+
+		Vec operator-(const Vec &v)
+		{
+			return Vec<T>(x - v.x, y - v.y, z - v.z);
+		}
+
+		Vec operator*(const Vec &v)
+		{
+			return Vec<T>(x * v.x, y * v.y, z * v.z);
+		}
+
+		Vec operator/(const Vec &v)
+		{
+			return Vec<T>(x / v.x, y / v.y, z / v.z);
+		}
+
 		T	getX(void) const { return this->x; };
 		T	getY(void) const { return this->y; };
 		T	getZ(void) const { return this->z; };

@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:12:47 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 19:48:18 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/09 14:27:27 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,18 @@ private:
 	static Game *s_Instance;
 	Snoekie s;
 	Food	*f;
-	int		score;
 
 	Game();
 	t_milli getCurrentTime();
-	
+
 	int m_FPS;
 	int m_Width;
 	int m_Height;
+	int	score;
 	std::string m_Name;
 	IRenderer *m_Renderer;
 	void *m_DLLHandle;
-	double x, y, xv, yv;
+	int xv, yv;
+	int m_Difficulty;
 	fun_t m_CreateFun;
 };

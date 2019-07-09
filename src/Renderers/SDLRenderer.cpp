@@ -214,7 +214,7 @@ void SDLRenderer::DrawSquare(int x, int y, const Color &c)
 	SDL_RenderDrawRect(ren, &r);
 }
 
-void SDLRenderer::PrintText(int x, int y, std::string string)
+void SDLRenderer::PrintText(int x, int y, const char *string)
 {
 	(void)x;
 	(void)y;

@@ -6,15 +6,13 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 20:26:28 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/09 15:49:32 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "IRenderer.hpp"
-#include <glad/glad.h>
-#define GL_SILENCE_DEPRECATION
-#include <GLFW/glfw3.h>
+#include <SFML/Graphics.hpp>
 
 class SFMLRenderer : public IRenderer {
 	public:
@@ -30,7 +28,7 @@ class SFMLRenderer : public IRenderer {
 		virtual void EndFrame();
 
 		virtual void DrawSquare(int x, int y, const Color &c);
-		virtual void PrintText(int x, int y, std::string string);
+		virtual void PrintText(int x, int y, const char *string);
 
 		virtual bool ShouldClose();
 		virtual void SetShouldClose(int val);
@@ -47,17 +45,14 @@ class SFMLRenderer : public IRenderer {
 		virtual void SetKey(int32_t key, int32_t val);
 
 	private:
-	
+
 		SFMLRenderer();
 		int m_Width;
 		int m_Height;
 		int m_Keys[NB_KEY_LAST];
 		std::string m_Name;
-		GLFWwindow *m_Win;
-		GLuint m_Shader;
-		GLuint m_VertexArray;
-		GLuint m_VertexBuffer;
-		GLuint m_IndexBuffer;
+		sf::RenderWindow win;
+		Color m_ClearColor = {0, 0, 0, 0};
 
 	protected:
 };

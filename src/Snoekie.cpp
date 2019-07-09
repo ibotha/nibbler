@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:50:11 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 20:17:09 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/09 14:08:08 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void 		Snoekie::Move(Vec<int> dir, bool overFood)
 void					Snoekie::Render(IRenderer *render) const
 {
 	for (auto a: this->Body)
-		render->DrawSquare(a.getX(), a.getY(), {1, 0, 0, 1});	
+		render->DrawSquare(a.getX(), a.getY(), {1, 0, 0, 1});
 }
 
 void					Snoekie::Update(IRenderer *render)
@@ -82,6 +82,7 @@ void					Snoekie::Update(IRenderer *render)
 		Head.getY() >= render->GetHeight()
 		)
 		Game::Get()->KillSnake();
+
 }
 
 bool					Snoekie::collision(IEntity *ent) const
@@ -93,6 +94,8 @@ bool					Snoekie::collision(IEntity *ent) const
 
 bool					Snoekie::inBounds(const Vec<int> &pos) const
 {
-	Vec<int> head = this->Body.back();
-	return (head == pos);
+	for (auto a: this->Body)
+		if (a == pos)
+			return true;
+	return false;
 }

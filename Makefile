@@ -3,17 +3,25 @@ CPPC = g++
 
 NAME = nibbler
 
-CFLAGSOG = 
+CFLAGSOG =
 CPPFLAGSOG = -std=c++17
 
-FLAGS = -Wall -Werror -Wextra -I glfw/include -I glad/include -I SDL2/include
+FLAGS = -Wall -Werror -Wextra -I glfw/include -I glad/include -I SDL2/include -I includes -I SFML/include -I SFML/lib
+
+SFMLTAR='SFML-clang.tar.gz'
+SFML_DIR='SFML-2.5.0-macOS-clang'
+DWNLD=sh -c '$$(curl -Lo $(SFMLTAR) --progress-bar https://www.sfml-dev.org/files/SFML-2.5.0-macOS-clang.tar.gz)'
+UNTAR=sh -c '$$(tar -xzf $(SFMLTAR) && rm -rf $(SFMLTAR))'
+CR_MV=sh -c '$$(mv $(SFML_DIR) ./SFML && cp -rf ./SFML/extlibs/* ./SFML/Frameworks/.)'
 
 CFLAGS = $(CFLAGSOG) $(FLAGS)
 CPPFLAGS = $(CPPFLAGSOG) $(FLAGS)
 
-OPENGLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+RPATH = -Wl,-rpath,$(PWD)/SFML/Frameworks
+
+OPENGLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework GLUT -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 SDLCDEP = SDL2/build/libSDL2main.a SDL2/build/libSDL2.a -framework AudioToolbox -framework CoreVideo -framework Carbon -framework ForceFeedback -framework IOKit -framework Cocoa -framework CoreAudio -liconv -lm  -Wl,-current_version,10.0.0 -Wl,-compatibility_version,1.0.0 -Wl,-undefined,error
-SFMLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+SFMLCDEP = -F SFML/Frameworks $(RPATH) -framework sfml-graphics -framework sfml-audio -framework sfml-network -framework sfml-window -framework sfml-system
 
 FILES = main.cpp Game.cpp Snoekie.cpp Food.cpp
 
@@ -89,6 +97,21 @@ SDL2: SDL2.tar.gz
 SDL2.tar.gz:
 	curl -o SDL2.tar.gz https://www.libsdl.org/release/SDL2-2.0.9.tar.gz
 
+SFML: SFMLTAR
+
+SFMLTAR:
+	mkdir -p $(SFML_DIR)
+	$(DWNLD)
+	$(UNTAR)
+	$(CR_MV)
+# FREETYPE: freetype.tar.gz
+# 	mkdir -p FREETYPE
+# 	mkdir -p FREETYPE/build
+# 	tar -xf freetype.tar.gz -C FREETYPE --strip-components 1
+# 	cd FREETYPE/build && cmake .. && make
+
+# freetype.tar.gz:
+# 	curl -o freetype.tar.gz https://tenet.dl.sourceforge.net/project/freetype/freetype2/2.10.1/freetype-2.10.1.tar.gz
 
 $(OPENGLLIB): GLFW $(ODIR)/glad.o $(OPENGLOBJ) $(OPENGLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(OPENGLLIB)$(END)"
@@ -150,5 +173,4 @@ re: fclean all
 
 shallowre: clean all
 
-.PHONY: re clean all fclean GLFW $(ODIR) SDL2
-
+.PHONY: re clean all fclean GLUT GLFW $(ODIR) SDL2 FREETYPE
