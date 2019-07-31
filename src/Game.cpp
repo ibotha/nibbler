@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 14:53:51 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 15:03:12 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,20 @@ void Game::Set(Game *game)
 
 void Game::KillSnake()
 {
+	std::fstream SomeFileToHoldScore;
+	SomeFileToHoldScore.open("score.txt");
+	int highscore = 0;
+	SomeFileToHoldScore >> highscore;
+	SomeFileToHoldScore.close();
+	SomeFileToHoldScore.open("score.txt");
 	std::cout << "\033[0;35mCongratulations!!! you scored a total " << this->score << " points!!\033[0;0m" << std::endl;
-	if (this->score <=4)
+	if (this->score <= highscore)
 		std::cout << "\033[0;31mYou couldn't even beat the highscore, LOSER!!!\033[0;0m" << std::endl;
 	else
+	{
 		std::cout << "\033[0;32mYou managed to beat the highscore!!! wtf!\033[0;0m" << std::endl;
+		SomeFileToHoldScore << std::to_string(this->score);
+	}
 	m_Renderer->SetShouldClose(1);
 }
 
