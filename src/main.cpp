@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:36 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 13:10:43 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/08 16:29:07 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 
 int main()
 {
-	Game g(20, 20, "Nibbler", 10);
-	g.Run();
+	srand(time(NULL));
+	Game::Get()->Run();
 }

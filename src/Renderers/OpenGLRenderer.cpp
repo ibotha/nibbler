@@ -53,9 +53,11 @@ OpenGLRenderer::OpenGLRenderer(int width, int height, std::string const &name)
 	{
 		glUniform2f(loc, width, height);
 	}
+	glUseProgram(m_Shader);
 	m_ColLoc = glGetUniformLocation(m_Shader, "u_Color");
 	m_CoordLoc = glGetUniformLocation(m_Shader, "u_Coord");
 	std::memset(m_Keys, 0, sizeof(int) * NB_KEY_LAST);
+	std::memset(m_Keys, 0, sizeof(bool) * NB_KEY_LAST);
 	glfwSetWindowUserPointer(m_Win, this);
 
 	glfwSetKeyCallback(m_Win, [](GLFWwindow* window, int key, int scancode, int action, int mods)
@@ -138,9 +140,26 @@ void OpenGLRenderer::DrawSquare(int x, int y, const Color &c)
 		return;
 
 	glUseProgram(m_Shader);
-	glUniform2f(m_CoordLoc, x, y);
+	std::cout << m_CoordLoc << ", " << m_ColLoc << ", " << gy << std::endl;
+	glUniform2f(m_CoordLoc, gx, gy);
 	glUniform3f(m_ColLoc, c.r, c.g, c.b);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+}
+
+void OpenGLRenderer::PrintText(int x, int y, const char *string)
+{
+	std::stringstream	ss;
+	ss << string;
+	const char *cstr = ss.str().c_str();
+	if (cstr)
+	{
+		GLint xx, yy;
+		xx = x;
+		yy = y;
+		//size_t len = strlen(cstr);
+		//for (size_t i = 0; i < len; i++)
+			//glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, cstr[i]);
+	}
 }
 
 void OpenGLRenderer::BeginFrame()
@@ -151,6 +170,14 @@ void OpenGLRenderer::BeginFrame()
 void OpenGLRenderer::EndFrame()
 {
 	glfwSwapBuffers(m_Win);
+	for (int i = 0; i < NB_KEY_LAST; i++)
+	{
+		if (m_Clear[i])
+		{
+			m_Clear[i] = false;
+			m_Keys[i] = 0;
+		}
+	}
 }
 
 bool OpenGLRenderer::ShouldClose()
@@ -165,7 +192,9 @@ std::string const &OpenGLRenderer::GetName() const { return m_Name; }
 int32_t OpenGLRenderer::GetKey(int32_t key) const
 {
 	if (key > NB_KEY_UNKNOWN && key < NB_KEY_LAST)
+	{
 		return m_Keys[key];
+	}
 	else
 		return 0;
 }
@@ -173,7 +202,12 @@ int32_t OpenGLRenderer::GetKey(int32_t key) const
 void OpenGLRenderer::SetKey(int32_t key, int32_t val)
 {
 	if (key > NB_KEY_UNKNOWN && key < NB_KEY_LAST)
-		m_Keys[key] = val;
+	{
+		if (val)
+			m_Keys[key] = val;
+		else
+			m_Clear[key] = true;
+	}
 }
 
 void OpenGLRenderer::SetShouldClose(int val)
@@ -264,10 +298,10 @@ static GLuint LoadShaders(const char * vertex_file_path, const char * fragment_f
 		glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
 		printf("%s\n", &ProgramErrorMessage[0]);
 	}
-	
+
 	glDetachShader(ProgramID, VertexShaderID);
 	glDetachShader(ProgramID, FragmentShaderID);
-	
+
 	glDeleteShader(VertexShaderID);
 	glDeleteShader(FragmentShaderID);
 

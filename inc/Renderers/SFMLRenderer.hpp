@@ -6,13 +6,13 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 11:00:23 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/31 10:47:26 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "IRenderer.hpp"
-#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 
 class SFMLRenderer : public IRenderer {
 	public:
@@ -28,6 +28,7 @@ class SFMLRenderer : public IRenderer {
 		virtual void EndFrame();
 
 		virtual void DrawSquare(int x, int y, const Color &c);
+		virtual void PrintText(int x, int y, const char *string);
 
 		virtual bool ShouldClose();
 		virtual void SetShouldClose(int val);
@@ -44,14 +45,14 @@ class SFMLRenderer : public IRenderer {
 		virtual void SetKey(int32_t key, int32_t val);
 
 	private:
-	
+
 		SFMLRenderer();
 		int m_Width;
 		int m_Height;
 		int m_Keys[NB_KEY_LAST];
 		std::string m_Name;
-		sf::Window *win;
-		bool m_ShouldClose;
+		sf::RenderWindow m_Win;
+		Color m_ClearColor = {0, 0, 0, 0};
 
 	protected:
 };

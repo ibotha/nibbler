@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   IRenderer.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 12:28:26 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/09 10:24:35 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,6 +175,7 @@ class IRenderer {
 		virtual void EndFrame() = 0;
 
 		virtual void DrawSquare(int x, int y, const Color &c) = 0;
+		virtual void PrintText(int x, int y, const char *string) = 0;
 
 		virtual bool ShouldClose() = 0;
 		virtual void SetShouldClose(int val) = 0;

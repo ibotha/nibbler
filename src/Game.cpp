@@ -6,13 +6,15 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 13:10:14 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/10 08:16:13 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "nibblerpch.hpp"
 #include "Game.hpp"
 #include "Snoekie.hpp"
+
+Game *Game::s_Instance = new Game(50, 50, "Nibbler", 300);
 
 t_milli Game::getCurrentTime()
 {
@@ -22,16 +24,27 @@ t_milli Game::getCurrentTime()
 }
 
 Game::Game(int width, int height, std::string name, int fps)
-	:m_FPS(fps), m_Width(width), m_Height(height),  m_Name(name), m_DLLHandle(nullptr)
+	:m_FPS(fps), m_Width(width), m_Height(height), score(0), m_Name(name), m_DLLHandle(nullptr)
 {
 	LoadDLL("lib/libOpengl.so");
 	m_Renderer = m_CreateFun(width, height, name);
 	if (!m_Renderer)
 		throw std::exception();
+	m_Difficulty = 5;
 }
 
 Game::Game()
 {
+}
+
+Game *Game::Get()
+{
+	return s_Instance;
+}
+
+void Game::KillSnake()
+{
+	m_Renderer->SetShouldClose(1);
 }
 
 Game::Game(const Game &rhs)
@@ -60,6 +73,8 @@ void Game::GetInput()
 
 void Game::Update()
 {
+	static int lxv = xv, lyv = yv;
+	static int tick = 100;
 	if (m_Renderer->GetKey(NB_KEY_1) == NB_PRESS && !(yv < 0))
 	{
 		delete m_Renderer;
@@ -78,74 +93,73 @@ void Game::Update()
 		LoadDLL("lib/libSFML.so");
 		m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
 	}
-	if (m_Renderer->GetKey(NB_KEY_UP) == NB_PRESS && !(yv < 0))
+	if (m_Renderer->GetKey(NB_KEY_UP) == NB_PRESS && !(lyv < 0))
 	{
 		xv = 0;
 		yv = 1;
+		//std::cout << "UP" << std::endl;
 	}
-	else if (m_Renderer->GetKey(NB_KEY_DOWN) == NB_PRESS && !(yv > 0))
+	else if (m_Renderer->GetKey(NB_KEY_DOWN) == NB_PRESS && !(lyv > 0))
 	{
 		xv = 0;
 		yv = -1;
+		//std::cout << "DOWN" << std::endl;
 	}
-	else if (m_Renderer->GetKey(NB_KEY_LEFT) == NB_PRESS && !(xv > 0))
+	else if (m_Renderer->GetKey(NB_KEY_LEFT) == NB_PRESS && !(lxv > 0))
 	{
 		yv = 0;
 		xv = -1;
+		//std::cout << "LEFT" << std::endl;
 	}
-	else if (m_Renderer->GetKey(NB_KEY_RIGHT) == NB_PRESS && !(xv < 0))
+	else if (m_Renderer->GetKey(NB_KEY_RIGHT) == NB_PRESS && !(lxv < 0))
 	{
 		yv = 0;
 		xv = 1;
+		//std::cout << "RIGHT" << std::endl;
 	}
-
-	y += yv;
-	x += xv;
-
-		
-
-	s.Move(Vec{static_cast<int>(xv), static_cast<int>(yv), 0});
-
-	if (x > m_Renderer->GetWidth() - 1)
-		x = 0;
-	if (y > m_Renderer->GetHeight() - 1)
-		y = 0;
-	if (x < 0)
-		x = m_Renderer->GetWidth();
-	if (y < 0)
-		y = m_Renderer->GetHeight();
-
-	if (m_Renderer->GetKey(NB_KEY_SPACE))
+	if ((tick += m_Difficulty) >= 100)
 	{
-	}
-	if (s.collision())
-	{
-		//Die
+		lxv = xv, lyv = yv;
+		tick = 0;
+
+		bool overFood = (f) ? s.collision(f) : false;
+		if (overFood)
+		{
+			this->score++;
+			this->m_Difficulty += 10;
+			delete f;
+			f = nullptr;
+		}
+		if (f == nullptr)
+			f = new Food(Vec((rand() % (m_Width)), (rand() % (m_Height)), 0));
+		if(s.inBounds(s.getSnoekie().back() + Vec<int>({xv, yv, 0})))
+			KillSnake();
+		s.Move({static_cast<int>(xv), static_cast<int>(yv), 0}, overFood);
+		if (m_Renderer->GetKey(NB_KEY_SPACE))
+		{
+		}
+		s.Update(m_Renderer);
 	}
 }
 
 void Game::Render()
 {
-	auto snakes = s.getSnoekie();
-
-	for (auto x: snakes)
-	{
-		m_Renderer->DrawSquare(x.x, x.y, {1,0,0,1});
-	}
+	s.Render(m_Renderer);
+	f->Render(m_Renderer);
+	//RenderScore
+	m_Renderer->PrintText(10, 10, strdup("WEE"));
 }
 
 void Game::Run()
 {
 	m_Renderer->SetClearColour({1, 1, 1, 1});
-	
-	x = 0;
-	y = 0;
+
 	xv = 1;
 	yv = 0;
 	t_milli t1, t2;
 	double mspf = (1 / (double)m_FPS) * 1000;
 	t1 = getCurrentTime();
-	
+
 	while(!m_Renderer->ShouldClose())
 	{
 		t2 = getCurrentTime();

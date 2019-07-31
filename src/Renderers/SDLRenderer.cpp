@@ -214,6 +214,13 @@ void SDLRenderer::DrawSquare(int x, int y, const Color &c)
 	SDL_RenderDrawRect(ren, &r);
 }
 
+void SDLRenderer::PrintText(int x, int y, const char *string)
+{
+	(void)x;
+	(void)y;
+	(void)string;
+}
+
 void SDLRenderer::BeginFrame()
 {
 	SDL_SetRenderDrawColor(ren, m_ClearColor.r * 255, m_ClearColor.g * 255, m_ClearColor.b * 255, m_ClearColor.a * 255);
