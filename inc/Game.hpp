@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:12:47 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 14:20:42 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 14:53:53 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ public:
 	void GetInput();
 	void Update();
 	void Render();
-
-	void SetSize(int x, int y);
 
 	void KillSnake();
 

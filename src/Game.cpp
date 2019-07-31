@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 14:48:07 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 14:53:51 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,12 +195,6 @@ void Game::Run()
 			m_Renderer->SetShouldClose(1);
 		m_Renderer->EndFrame();
 	}
-}
-
-void Game::SetSize(int x, int y)
-{
-	this->m_Width = x;
-	this->m_Height = y;
 }
 
 void Game::LoadDLL(std::string const &path)
