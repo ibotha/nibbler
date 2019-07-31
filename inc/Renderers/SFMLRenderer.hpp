@@ -6,15 +6,13 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 12:30:32 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/08 11:00:23 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include "IRenderer.hpp"
-#include <glad/glad.h>
-#define GL_SILENCE_DEPRECATION
-#include <GLFW/glfw3.h>
+#include <SFML/Window.hpp>
 
 class SFMLRenderer : public IRenderer {
 	public:
@@ -52,11 +50,8 @@ class SFMLRenderer : public IRenderer {
 		int m_Height;
 		int m_Keys[NB_KEY_LAST];
 		std::string m_Name;
-		GLFWwindow *m_Win;
-		GLuint m_Shader;
-		GLuint m_VertexArray;
-		GLuint m_VertexBuffer;
-		GLuint m_IndexBuffer;
+		sf::Window *win;
+		bool m_ShouldClose;
 
 	protected:
 };

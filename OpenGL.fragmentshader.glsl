@@ -1,8 +1,8 @@
 #version 330 core
 
+uniform vec3 u_Color;
 out vec3 color;
-in vec3 v_Color;
 
 void main(){
-  color = v_Color;
+  color = u_Color;
 }

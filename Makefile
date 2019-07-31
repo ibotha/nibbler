@@ -6,14 +6,14 @@ NAME = nibbler
 CFLAGSOG = 
 CPPFLAGSOG = -std=c++17
 
-FLAGS = -Wall -Werror -Wextra -I glfw/include -I glad/include -I SDL2/include
+FLAGS = -Wall -Werror -Wextra -I glfw/include -I glad/include -I SDL2/include -I SFML/include
 
 CFLAGS = $(CFLAGSOG) $(FLAGS)
 CPPFLAGS = $(CPPFLAGSOG) $(FLAGS)
 
 OPENGLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 SDLCDEP = SDL2/build/libSDL2main.a SDL2/build/libSDL2.a -framework AudioToolbox -framework CoreVideo -framework Carbon -framework ForceFeedback -framework IOKit -framework Cocoa -framework CoreAudio -liconv -lm  -Wl,-current_version,10.0.0 -Wl,-compatibility_version,1.0.0 -Wl,-undefined,error
-SFMLCDEP = $(ODIR)/glad.o glfw/src/libglfw3.a -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
+SFMLCDEP = -L SFML/lib/ -lsfml-graphics -lsfml-window -lsfml-system -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 FILES = main.cpp Game.cpp Snoekie.cpp
 
@@ -76,25 +76,35 @@ END=\033[0m
 all: $(ODIR) $(LDIR) $(PCH) $(SDLLIB) $(SFMLLIB) $(OPENGLLIB) $(NAME)
 
 GLFW:
-	@echo "$(CYAN)Making\t\t$(GREEN)GLFW$(END)";
+	@echo "$(CYAN)Making\t\t$(GREEN)GLFW$(END)"
+	@git submodule init glfw
+	@git submodule update glfw
 	@cd glfw && cmake .
 	@make -C glfw
 
 SDL2: SDL2.tar.gz
-	mkdir -p SDL2
-	mkdir -p SDL2/build
-	tar -xf SDL2.tar.gz -C SDL2 --strip-components 1
-	cd SDL2/build && cmake .. && make
+	@echo "$(CYAN)Making\t\t$(GREEN)SDL2$(END)"
+	@mkdir -p SDL2
+	@mkdir -p SDL2/build
+	@tar -xf SDL2.tar.gz -C SDL2 --strip-components 1
+	@cd SDL2/build && cmake .. && make
+
+SFML:
+	@echo "$(CYAN)Making\t\t$(GREEN)SFML$(END)";
+	@if ! [ -d ~/.brew/Cellar/sfml ]; then brew install SFML; fi
+	@mkdir -p SFML
+	@rm -rf SFML/*
+	@cp -R ~/.brew/Cellar/sfml/2.5.1/* SFML/
 
 SDL2.tar.gz:
-	curl -o SDL2.tar.gz https://www.libsdl.org/release/SDL2-2.0.9.tar.gz
+	@curl -o SDL2.tar.gz https://www.libsdl.org/release/SDL2-2.0.9.tar.gz
 
 
 $(OPENGLLIB): GLFW $(ODIR)/glad.o $(OPENGLOBJ) $(OPENGLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(OPENGLLIB)$(END)"
 	$(CPPC) -shared $(OPENGLOBJ) -o $@ $(CPPFLAGS) $(OPENGLCDEP)
 
-$(SFMLLIB): GLFW $(ODIR)/glad.o $(SFMLOBJ) $(SFMLLIBDEP)
+$(SFMLLIB): SFML $(SFMLOBJ) $(SFMLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(SFMLLIB)$(END)"
 	@$(CPPC) -shared $(SFMLOBJ) -o $@ $(CPPFLAGS) $(SFMLCDEP)
 
@@ -145,10 +155,11 @@ fclean: clean
 	@make clean -C glfw
 	@rm -rf SDL2
 	@rm -rf SDL2.tar.gz
+	@rm -rf SFML
 
 re: fclean all
 
 shallowre: clean all
 
-.PHONY: re clean all fclean GLFW $(ODIR) SDL2
+.PHONY: re clean all fclean GLFW $(ODIR) SDL2 SFML
 

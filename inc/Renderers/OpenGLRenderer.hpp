@@ -6,7 +6,7 @@
 /*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/05 12:30:38 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/31 10:12:58 by ibotha           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ class OpenGLRenderer : public IRenderer {
 		std::string m_Name;
 		GLFWwindow *m_Win;
 		GLuint m_Shader;
+		GLuint m_ColLoc;
+		GLuint m_CoordLoc;
 		GLuint m_VertexArray;
 		GLuint m_VertexBuffer;
 		GLuint m_IndexBuffer;

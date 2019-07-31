@@ -53,6 +53,8 @@ OpenGLRenderer::OpenGLRenderer(int width, int height, std::string const &name)
 	{
 		glUniform2f(loc, width, height);
 	}
+	m_ColLoc = glGetUniformLocation(m_Shader, "u_Color");
+	m_CoordLoc = glGetUniformLocation(m_Shader, "u_Coord");
 	std::memset(m_Keys, 0, sizeof(int) * NB_KEY_LAST);
 	glfwSetWindowUserPointer(m_Win, this);
 
@@ -63,6 +65,34 @@ OpenGLRenderer::OpenGLRenderer(int width, int height, std::string const &name)
 		OpenGLRenderer& r = *(OpenGLRenderer*)glfwGetWindowUserPointer(window);
 		r.SetKey(key, action);
 	});
+
+	GLfloat g_vertex_buffer_data[] = {
+		0, 0, 0,
+		1, 0, 0,
+		1, 1, 0,
+		0, 1, 0
+	};
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+
+	static const GLuint g_index_buffer_data[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_index_buffer_data), g_index_buffer_data, GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
+	glVertexAttribPointer(
+		0,
+		3,
+		GL_FLOAT,
+		GL_FALSE,
+		4 * 3,
+		(void*)0
+	);
 }
 
 OpenGLRenderer::OpenGLRenderer(const OpenGLRenderer &rhs)
@@ -106,46 +136,11 @@ void OpenGLRenderer::DrawSquare(int x, int y, const Color &c)
 	(void)c;
 	if (!(x < m_Width && x > -1 && y > -1 && y < m_Height))
 		return;
-	GLfloat g_vertex_buffer_data[] = {
-		gx    , gy    , 0, 0, 0, 1,
-		gx + 1, gy    , 0, 0, 0, 1,
-		gx + 1, gy + 1, 0, 0, 0, 1,
-		gx    , gy + 1, 0, 0, 0, 1
-	};
 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
-	static const GLuint g_index_buffer_data[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(g_index_buffer_data), g_index_buffer_data, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VertexBuffer);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_IndexBuffer);
-	glVertexAttribPointer(
-		0,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		4 * 6,
-		(void*)0
-	);
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(
-		1,
-		3,
-		GL_FLOAT,
-		GL_FALSE,
-		4 * 6,
-		(void*)(4 * 3)
-	);
 	glUseProgram(m_Shader);
+	glUniform2f(m_CoordLoc, x, y);
+	glUniform3f(m_ColLoc, c.r, c.g, c.b);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
 }
 
 void OpenGLRenderer::BeginFrame()
