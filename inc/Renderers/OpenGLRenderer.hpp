@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   OpenGLRenderer.hpp                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
+/*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2019/07/31 11:29:18 by jwolf            ###   ########.fr       */
+=======
+/*   Updated: 2019/07/31 10:44:22 by ibotha           ###   ########.fr       */
+>>>>>>> f3bc33ab352ad65437f3c15772f4ec3c2a3ed355
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +60,8 @@ class OpenGLRenderer : public IRenderer {
 		std::string m_Name;
 		GLFWwindow *m_Win;
 		GLuint m_Shader;
+		GLuint m_ColLoc;
+		GLuint m_CoordLoc;
 		GLuint m_VertexArray;
 		GLuint m_VertexBuffer;
 		GLuint m_IndexBuffer;

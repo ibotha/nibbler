@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   SFMLRenderer.cpp                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/07/31 10:40:42 by ibotha            #+#    #+#             */
+/*   Updated: 2019/07/31 10:40:44 by ibotha           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "nibblerpch.hpp"
 #include "Renderers/SFMLRenderer.hpp"
 
@@ -123,7 +135,7 @@ SFMLRenderer::SFMLRenderer(int width, int height, std::string const &name)
 	m_Height = height;
 	m_Name = name;
 
-	win.create(sf::VideoMode(SCREEN_W, SCREEN_H), m_Name.c_str());
+	m_Win.create(sf::VideoMode(SCREEN_W, SCREEN_H), m_Name.c_str());
 	std::memset(m_Keys, 0, sizeof(int) * NB_KEY_LAST);
 }
 
@@ -143,13 +155,12 @@ SFMLRenderer &SFMLRenderer::operator=(const SFMLRenderer &rhs)
 
 SFMLRenderer::~SFMLRenderer()
 {
-
 }
 
 void SFMLRenderer::GetInput()
 {
 	sf::Event e;
-	while (win.pollEvent(e))
+	while (m_Win.pollEvent(e))
 	{
 		(void)e;
 	}
@@ -186,22 +197,22 @@ void SFMLRenderer::DrawSquare(int x, int y, const Color &c)
 	sf::Color newCol = {static_cast<uint8_t>(c.r * 255), static_cast<uint8_t>(c.g * 255), static_cast<uint8_t>(c.b * 255), static_cast<uint8_t>(c.a * 255)};
 	r.setFillColor(newCol);
 
-	win.draw(r);
+	m_Win.draw(r);
 }
 
 void SFMLRenderer::BeginFrame()
 {
-	win.clear();
+	m_Win.clear();
 }
 
 void SFMLRenderer::EndFrame()
 {
-	win.display();
+	m_Win.display();
 }
 
 bool SFMLRenderer::ShouldClose()
 {
-	return !win.isOpen();
+	return !m_Win.isOpen();
 }
 
 int SFMLRenderer::GetWidth() const { return m_Width; }
@@ -221,7 +232,7 @@ void SFMLRenderer::SetKey(int32_t key, int32_t val)
 void SFMLRenderer::SetShouldClose(int val)
 {
 	if (val)
-		win.close();
+		m_Win.close();
 }
 
 const char *SFMLRenderer::InitFail::what() const throw()

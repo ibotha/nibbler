@@ -12,7 +12,7 @@ SFMLTAR='SFML-clang.tar.gz'
 SFML_DIR='SFML-2.5.0-macOS-clang'
 DWNLD=sh -c '$$(curl -Lo $(SFMLTAR) --progress-bar https://www.sfml-dev.org/files/SFML-2.5.0-macOS-clang.tar.gz)'
 UNTAR=sh -c '$$(tar -xzf $(SFMLTAR) && rm -rf $(SFMLTAR))'
-CR_MV=sh -c '$$(mv $(SFML_DIR) ./SFML && cp -rf ./SFML/extlibs/* ./SFML/Frameworks/.)'
+CR_MV=sh -c '$$(mv $(SFML_DIR) ./SFML && mkdir -p ./SFML/Frameworks && cp -rf ./SFML/extlibs/* ./SFML/Frameworks/.)'
 
 CFLAGS = $(CFLAGSOG) $(FLAGS)
 CPPFLAGS = $(CPPFLAGSOG) $(FLAGS)
@@ -84,22 +84,23 @@ END=\033[0m
 all: $(ODIR) $(LDIR) $(PCH) $(SDLLIB) $(SFMLLIB) $(OPENGLLIB) $(NAME)
 
 GLFW:
-	@echo "$(CYAN)Making\t\t$(GREEN)GLFW$(END)";
+	@echo "$(CYAN)Making\t\t$(GREEN)GLFW$(END)"
+	@git submodule init glfw
+	@git submodule update glfw
 	@cd glfw && cmake .
 	@make -C glfw
 
 SDL2: SDL2.tar.gz
-	mkdir -p SDL2
-	mkdir -p SDL2/build
-	tar -xf SDL2.tar.gz -C SDL2 --strip-components 1
-	cd SDL2/build && cmake .. && make
+	@echo "$(CYAN)Making\t\t$(GREEN)SDL2$(END)"
+	@mkdir -p SDL2
+	@mkdir -p SDL2/build
+	@tar -xf SDL2.tar.gz -C SDL2 --strip-components 1
+	@cd SDL2/build && cmake .. && make
 
 SDL2.tar.gz:
-	curl -o SDL2.tar.gz https://www.libsdl.org/release/SDL2-2.0.9.tar.gz
+	@curl -o SDL2.tar.gz https://www.libsdl.org/release/SDL2-2.0.9.tar.gz
 
-SFML: SFMLTAR
-
-SFMLTAR:
+SFML:
 	mkdir -p $(SFML_DIR)
 	$(DWNLD)
 	$(UNTAR)
@@ -117,7 +118,7 @@ $(OPENGLLIB): GLFW $(ODIR)/glad.o $(OPENGLOBJ) $(OPENGLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(OPENGLLIB)$(END)"
 	$(CPPC) -shared $(OPENGLOBJ) -o $@ $(CPPFLAGS) $(OPENGLCDEP)
 
-$(SFMLLIB): GLFW $(ODIR)/glad.o $(SFMLOBJ) $(SFMLLIBDEP)
+$(SFMLLIB): SFML $(SFMLOBJ) $(SFMLLIBDEP)
 	@echo "$(CYAN)Compiling\t$(GREEN)$(SFMLLIB)$(END)"
 	@$(CPPC) -shared $(SFMLOBJ) -o $@ $(CPPFLAGS) $(SFMLCDEP)
 
@@ -168,6 +169,7 @@ fclean: clean
 	@make clean -C glfw
 	@rm -rf SDL2
 	@rm -rf SDL2.tar.gz
+	@rm -rf SFML
 
 re: fclean all
 

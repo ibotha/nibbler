@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   Game.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
+/*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2019/07/31 13:27:06 by jwolf            ###   ########.fr       */
+=======
+/*   Updated: 2019/07/31 11:27:42 by ibotha           ###   ########.fr       */
+>>>>>>> f3bc33ab352ad65437f3c15772f4ec3c2a3ed355
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +34,7 @@ Game::Game(int width, int height, std::string name, int fps)
 	m_Renderer = m_CreateFun(width, height, name);
 	if (!m_Renderer)
 		throw std::exception();
-	m_Difficulty = 5;
+	m_Difficulty = 10;
 }
 
 Game::Game()
@@ -137,7 +141,7 @@ void Game::Update()
 		if (overFood)
 		{
 			this->score++;
-			this->m_Difficulty += 10;
+			//this->m_Difficulty += 10;
 			delete f;
 			f = nullptr;
 		}

@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   SFMLRenderer.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
+/*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2019/07/31 11:27:36 by jwolf            ###   ########.fr       */
+=======
+/*   Updated: 2019/07/31 10:47:26 by ibotha           ###   ########.fr       */
+>>>>>>> f3bc33ab352ad65437f3c15772f4ec3c2a3ed355
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +54,7 @@ class SFMLRenderer : public IRenderer {
 		int m_Height;
 		int m_Keys[NB_KEY_LAST];
 		std::string m_Name;
-		sf::RenderWindow win;
+		sf::RenderWindow m_Win;
 		Color m_ClearColor = {0, 0, 0, 0};
 
 	protected:
