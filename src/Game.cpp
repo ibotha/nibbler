@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 13:37:38 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 13:46:09 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ Game *Game::Get()
 void Game::KillSnake()
 {
 	std::cout << "\033[0;35mCongratulations!!! you scored a total " << this->score << " points!!" << std::endl;
-	if (this->score <=3)
+	if (this->score <=4)
 		std::cout << "\033[0;31mYou couldn't even beat the highscore, LOSER!!!" << std::endl;
 	else
 		std::cout << "\033[0;32mYou managed to beat the highscore!!! wtf!" << std::endl;
