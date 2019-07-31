@@ -189,15 +189,6 @@ void SFMLRenderer::DrawSquare(int x, int y, const Color &c)
 	win.draw(r);
 }
 
-void SFMLRenderer::PrintText(int x, int y, const char *string)
-{
-	(void)x;
-	(void)y;
-	(void)string;
-	//SDL_SetRenderDrawColor(ren, c.r * 255, c.g * 255, c.b * 255, c.a * 255);
-	//SDL_RenderDrawRect(ren, &r);
-}
-
 void SFMLRenderer::BeginFrame()
 {
 	win.clear();

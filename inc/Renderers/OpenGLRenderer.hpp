@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/09 14:39:34 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 11:29:18 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ class OpenGLRenderer : public IRenderer {
 		virtual void EndFrame();
 
 		virtual void DrawSquare(int x, int y, const Color &c);
-		virtual void PrintText(int x, int y, const char *string);
 
 		virtual bool ShouldClose();
 		virtual void SetShouldClose(int val);

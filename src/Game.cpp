@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/10 08:16:13 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 13:27:06 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ Game *Game::Get()
 
 void Game::KillSnake()
 {
+	std::cout << "Congratulations!!! you scored a total " << this->score << " points!!" << std::endl;
+	if (this->score <=3)
+		std::cout << "You couldn't even beat the highscore, LOSER!!!" << std::endl;
+	else
+		std::cout << "You managed to beat the highscore!!! wtf!" << std::endl;
 	m_Renderer->SetShouldClose(1);
 }
 
@@ -75,23 +80,29 @@ void Game::Update()
 {
 	static int lxv = xv, lyv = yv;
 	static int tick = 100;
-	if (m_Renderer->GetKey(NB_KEY_1) == NB_PRESS && !(yv < 0))
+	try
 	{
-		delete m_Renderer;
-		LoadDLL("lib/libOpengl.so");
-		m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
-	}
-	if (m_Renderer->GetKey(NB_KEY_2) == NB_PRESS && !(yv < 0))
+		if (m_Renderer->GetKey(NB_KEY_1) == NB_PRESS && !(yv < 0))
+		{
+			delete m_Renderer;
+			LoadDLL("lib/libOpengl.so");
+			m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+		}
+		if (m_Renderer->GetKey(NB_KEY_2) == NB_PRESS && !(yv < 0))
+		{
+			delete m_Renderer;
+			LoadDLL("lib/libSDL.so");
+			m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+		}
+		if (m_Renderer->GetKey(NB_KEY_3) == NB_PRESS && !(yv < 0))
+		{
+			delete m_Renderer;
+			LoadDLL("lib/libSFML.so");
+			m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+		}
+	} catch (const std::exception &e)
 	{
-		delete m_Renderer;
-		LoadDLL("lib/libSDL.so");
-		m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
-	}
-	if (m_Renderer->GetKey(NB_KEY_3) == NB_PRESS && !(yv < 0))
-	{
-		delete m_Renderer;
-		LoadDLL("lib/libSFML.so");
-		m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+		throw Exceptions::LibraryNotFound(e.what());
 	}
 	if (m_Renderer->GetKey(NB_KEY_UP) == NB_PRESS && !(lyv < 0))
 	{
@@ -146,8 +157,6 @@ void Game::Render()
 {
 	s.Render(m_Renderer);
 	f->Render(m_Renderer);
-	//RenderScore
-	m_Renderer->PrintText(10, 10, strdup("WEE"));
 }
 
 void Game::Run()
@@ -185,21 +194,13 @@ void Game::Run()
 void Game::LoadDLL(std::string const &path)
 {
 	if (m_DLLHandle)
-	{
 		dlclose(m_DLLHandle);
-	}
 	m_DLLHandle = dlopen(path.c_str(), RTLD_NOW | RTLD_GLOBAL);
 	char* lError = dlerror();
 	if (lError)
-	{
-		std::cout << "Error: " <<  lError << std::endl;
-		throw std::exception();
-	}
+		throw Exceptions::LibraryNotFound(lError);
 	*(void **)(&m_CreateFun) = dlsym(m_DLLHandle, "CreateRenderer");
 	lError = dlerror();
 	if (lError)
-	{
-		std::cout << "Error: " <<  lError << std::endl;
-		throw std::exception();
-	}
+		throw Exceptions::LibraryNotFound(lError);
 }

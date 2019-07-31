@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:36 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/08 16:29:07 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 11:11:37 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,5 +16,12 @@
 int main()
 {
 	srand(time(NULL));
-	Game::Get()->Run();
+	try
+	{
+		Game::Get()->Run();
+	}
+	catch(const Exceptions::LibraryNotFound& e)
+	{
+		std::cerr << e.what() << '\n';
+	}
 }

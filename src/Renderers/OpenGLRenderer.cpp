@@ -154,22 +154,6 @@ void OpenGLRenderer::DrawSquare(int x, int y, const Color &c)
 	glDisableVertexAttribArray(1);
 }
 
-void OpenGLRenderer::PrintText(int x, int y, const char *string)
-{
-	std::stringstream	ss;
-	ss << string;
-	const char *cstr = ss.str().c_str();
-	if (cstr)
-	{
-		GLint xx, yy;
-		xx = x;
-		yy = y;
-		//size_t len = strlen(cstr);
-		//for (size_t i = 0; i < len; i++)
-			//glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, cstr[i]);
-	}
-}
-
 void OpenGLRenderer::BeginFrame()
 {
 	glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
