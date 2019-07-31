@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:50:11 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/09 14:08:08 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 14:43:12 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include "Snoekie.hpp"
 #include "Game.hpp"
 
-Snoekie::Snoekie(void)
+Snoekie::Snoekie(IRenderer *render)
 {
 	for(int i = 0; i < 4; i++)
 	{
-		Vec<int> s(i, i, 0);
+		Vec<int> s(i + (render->GetWidth() / 2) - 2, (render->GetHeight() / 2) - 2, 0);
 		this->Body.push_back(s);
 	}
 }

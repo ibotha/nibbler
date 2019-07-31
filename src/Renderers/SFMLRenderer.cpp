@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   SFMLRenderer.cpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 10:40:42 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 10:40:44 by ibotha           ###   ########.fr       */
+/*   Updated: 2019/07/31 14:46:00 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ bool SFMLRenderer::ShouldClose()
 }
 
 int SFMLRenderer::GetWidth() const { return m_Width; }
-int SFMLRenderer::GetHeight() const { return m_Width; }
+int SFMLRenderer::GetHeight() const { return m_Height; }
 std::string const &SFMLRenderer::GetName() const { return m_Name; }
 
 int32_t SFMLRenderer::GetKey(int32_t key) const

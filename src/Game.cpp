@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 13:46:09 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 14:48:07 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "Game.hpp"
 #include "Snoekie.hpp"
 
-Game *Game::s_Instance = new Game(50, 50, "Nibbler", 300);
+Game *Game::s_Instance;
 
 t_milli Game::getCurrentTime()
 {
@@ -26,11 +26,15 @@ t_milli Game::getCurrentTime()
 Game::Game(int width, int height, std::string name, int fps)
 	:m_FPS(fps), m_Width(width), m_Height(height), score(0), m_Name(name), m_DLLHandle(nullptr)
 {
+	m_Width = std::clamp(width, 10, SCREEN_W / 2);
+	m_Height = std::clamp(height, 10, SCREEN_H / 2);
 	LoadDLL("lib/libOpengl.so");
-	m_Renderer = m_CreateFun(width, height, name);
+	m_Renderer = m_CreateFun(m_Width, m_Height, name);
 	if (!m_Renderer)
 		throw std::exception();
-	m_Difficulty = 10;
+	m_Difficulty = 1;
+	s = new Snoekie(m_Renderer);
+	f = new Food(Vec((rand() % (m_Width)), (rand() % (m_Height)), 0));
 }
 
 Game::Game()
@@ -42,13 +46,18 @@ Game *Game::Get()
 	return s_Instance;
 }
 
+void Game::Set(Game *game)
+{
+	s_Instance = game;
+}
+
 void Game::KillSnake()
 {
-	std::cout << "\033[0;35mCongratulations!!! you scored a total " << this->score << " points!!" << std::endl;
+	std::cout << "\033[0;35mCongratulations!!! you scored a total " << this->score << " points!!\033[0;0m" << std::endl;
 	if (this->score <=4)
-		std::cout << "\033[0;31mYou couldn't even beat the highscore, LOSER!!!" << std::endl;
+		std::cout << "\033[0;31mYou couldn't even beat the highscore, LOSER!!!\033[0;0m" << std::endl;
 	else
-		std::cout << "\033[0;32mYou managed to beat the highscore!!! wtf!" << std::endl;
+		std::cout << "\033[0;32mYou managed to beat the highscore!!! wtf!\033[0;0m" << std::endl;
 	m_Renderer->SetShouldClose(1);
 }
 
@@ -129,30 +138,30 @@ void Game::Update()
 		lxv = xv, lyv = yv;
 		tick = 0;
 
-		bool overFood = (f) ? s.collision(f) : false;
+		bool overFood = (f) ? s->collision(f) : false;
 		if (overFood)
 		{
 			this->score++;
-			this->m_Difficulty += 10;
+			this->m_Difficulty += 1;
 			delete f;
 			f = nullptr;
 		}
 		if (f == nullptr)
 			f = new Food(Vec((rand() % (m_Width)), (rand() % (m_Height)), 0));
-		if(s.inBounds(s.getSnoekie().back() + Vec<int>({xv, yv, 0})))
+		if(s->inBounds(s->getSnoekie().back() + Vec<int>({xv, yv, 0})))
 			KillSnake();
-		s.Move({static_cast<int>(xv), static_cast<int>(yv), 0}, overFood);
+		s->Move({static_cast<int>(xv), static_cast<int>(yv), 0}, overFood);
 		if (m_Renderer->GetKey(NB_KEY_SPACE))
 		{
 		}
-		s.Update(m_Renderer);
+		s->Update(m_Renderer);
 	}
 }
 
 void Game::Render()
 {
-	s.Render(m_Renderer);
 	f->Render(m_Renderer);
+	s->Render(m_Renderer);
 }
 
 void Game::Run()
@@ -164,6 +173,7 @@ void Game::Run()
 	t_milli t1, t2;
 	double mspf = (1 / (double)m_FPS) * 1000;
 	t1 = getCurrentTime();
+
 
 	while(!m_Renderer->ShouldClose())
 	{
@@ -185,6 +195,12 @@ void Game::Run()
 			m_Renderer->SetShouldClose(1);
 		m_Renderer->EndFrame();
 	}
+}
+
+void Game::SetSize(int x, int y)
+{
+	this->m_Width = x;
+	this->m_Height = y;
 }
 
 void Game::LoadDLL(std::string const &path)

@@ -169,7 +169,7 @@ bool OpenGLRenderer::ShouldClose()
 }
 
 int OpenGLRenderer::GetWidth() const { return m_Width; }
-int OpenGLRenderer::GetHeight() const { return m_Width; }
+int OpenGLRenderer::GetHeight() const { return m_Height; }
 std::string const &OpenGLRenderer::GetName() const { return m_Name; }
 
 int32_t OpenGLRenderer::GetKey(int32_t key) const
@@ -237,7 +237,7 @@ static GLuint LoadShaders(const char * vertex_file_path, const char * fragment_f
 	int InfoLogLength;
 
 	// Compile Vertex Shader
-	std::cout << "\033[0;36mCompiling shader : " << vertex_file_path << std::endl;
+	std::cout << "\033[0;36mCompiling shader : " << vertex_file_path << "\033[0;0m" << std::endl;
 	char const * VertexSourcePointer = VertexShaderCode.c_str();
 	glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
 	glCompileShader(VertexShaderID);
@@ -252,7 +252,7 @@ static GLuint LoadShaders(const char * vertex_file_path, const char * fragment_f
 	}
 
 	// Compile Fragment Shader
-	std::cout << "\033[0;36mCompiling shader : " << fragment_file_path << std::endl;
+	std::cout << "\033[0;36mCompiling shader : " << fragment_file_path << "\033[0;0m" << std::endl;
 	char const * FragmentSourcePointer = FragmentShaderCode.c_str();
 	glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
 	glCompileShader(FragmentShaderID);
@@ -267,7 +267,7 @@ static GLuint LoadShaders(const char * vertex_file_path, const char * fragment_f
 	}
 
 	// Link the program
-	std::cout << "\033[0;36mLinking Programs" << std::endl;
+	std::cout << "\033[0;36mLinking Programs\033[0;0m" << std::endl;
 	GLuint ProgramID = glCreateProgram();
 	glAttachShader(ProgramID, VertexShaderID);
 	glAttachShader(ProgramID, FragmentShaderID);

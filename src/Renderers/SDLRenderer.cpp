@@ -231,7 +231,7 @@ bool SDLRenderer::ShouldClose()
 }
 
 int SDLRenderer::GetWidth() const { return m_Width; }
-int SDLRenderer::GetHeight() const { return m_Width; }
+int SDLRenderer::GetHeight() const { return m_Height; }
 std::string const &SDLRenderer::GetName() const { return m_Name; }
 
 int32_t SDLRenderer::GetKey(int32_t key) const

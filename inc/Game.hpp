@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:12:47 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 13:36:19 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 14:20:42 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,13 @@ public:
 	~Game();
 
 	static Game *Get();
+	static void Set(Game *g);
 
 	void GetInput();
 	void Update();
 	void Render();
+
+	void SetSize(int x, int y);
 
 	void KillSnake();
 
@@ -40,7 +43,7 @@ public:
 
 private:
 	static Game *s_Instance;
-	Snoekie s;
+	Snoekie *s;
 	Food	*f;
 
 	Game();

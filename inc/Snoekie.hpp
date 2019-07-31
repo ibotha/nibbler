@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/05 09:33:10 by jwolf             #+#    #+#             */
-/*   Updated: 2019/07/08 16:10:28 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/07/31 14:21:06 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 class Snoekie: public IEntity
 {
 	public:
-		Snoekie(void);
+		Snoekie(IRenderer * render);
 		~Snoekie(void);
 		Snoekie(Snoekie const&);
 		Snoekie &operator=(const Snoekie&);
@@ -35,11 +35,11 @@ class Snoekie: public IEntity
 		void	grow(void);
 		void	shrink(void);
 		void	Move(Vec<int>, bool);
-		 
+
 		std::vector<Vec<int>>	getSnoekie(void);
 
 	private:
 		std::vector<Vec<int>>	Body;
-		
-	protected:	
+
+	protected:
 };
