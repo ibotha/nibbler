@@ -140,7 +140,6 @@ void OpenGLRenderer::DrawSquare(int x, int y, const Color &c)
 		return;
 
 	glUseProgram(m_Shader);
-	std::cout << m_CoordLoc << ", " << m_ColLoc << ", " << gy << std::endl;
 	glUniform2f(m_CoordLoc, gx, gy);
 	glUniform3f(m_ColLoc, c.r, c.g, c.b);
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
