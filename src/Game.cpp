@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Game.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ibotha <ibotha@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2019/07/31 13:27:06 by jwolf            ###   ########.fr       */
-=======
-/*   Updated: 2019/07/31 11:27:42 by ibotha           ###   ########.fr       */
->>>>>>> f3bc33ab352ad65437f3c15772f4ec3c2a3ed355
+/*   Updated: 2019/07/31 13:37:38 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +44,11 @@ Game *Game::Get()
 
 void Game::KillSnake()
 {
-	std::cout << "Congratulations!!! you scored a total " << this->score << " points!!" << std::endl;
+	std::cout << "\033[0;35mCongratulations!!! you scored a total " << this->score << " points!!" << std::endl;
 	if (this->score <=3)
-		std::cout << "You couldn't even beat the highscore, LOSER!!!" << std::endl;
+		std::cout << "\033[0;31mYou couldn't even beat the highscore, LOSER!!!" << std::endl;
 	else
-		std::cout << "You managed to beat the highscore!!! wtf!" << std::endl;
+		std::cout << "\033[0;32mYou managed to beat the highscore!!! wtf!" << std::endl;
 	m_Renderer->SetShouldClose(1);
 }
 
@@ -112,25 +108,21 @@ void Game::Update()
 	{
 		xv = 0;
 		yv = 1;
-		//std::cout << "UP" << std::endl;
 	}
 	else if (m_Renderer->GetKey(NB_KEY_DOWN) == NB_PRESS && !(lyv > 0))
 	{
 		xv = 0;
 		yv = -1;
-		//std::cout << "DOWN" << std::endl;
 	}
 	else if (m_Renderer->GetKey(NB_KEY_LEFT) == NB_PRESS && !(lxv > 0))
 	{
 		yv = 0;
 		xv = -1;
-		//std::cout << "LEFT" << std::endl;
 	}
 	else if (m_Renderer->GetKey(NB_KEY_RIGHT) == NB_PRESS && !(lxv < 0))
 	{
 		yv = 0;
 		xv = 1;
-		//std::cout << "RIGHT" << std::endl;
 	}
 	if ((tick += m_Difficulty) >= 100)
 	{
@@ -141,7 +133,7 @@ void Game::Update()
 		if (overFood)
 		{
 			this->score++;
-			//this->m_Difficulty += 10;
+			this->m_Difficulty += 10;
 			delete f;
 			f = nullptr;
 		}
