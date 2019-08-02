@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/25 10:38:33 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 13:29:25 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/08/02 09:07:35 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ class SFMLRenderer : public IRenderer {
 		int m_Keys[NB_KEY_LAST];
 		std::string m_Name;
 		sf::RenderWindow m_Win;
-		Color m_ClearColor = {0, 0, 0, 0};
+		sf::Color m_ClearColor = {0, 0, 0, 0};
 
 	protected:
 };

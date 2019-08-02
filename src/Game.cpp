@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:20:24 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 15:03:12 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/08/02 09:29:23 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,10 @@ Game::Game(int width, int height, std::string name, int fps)
 	m_Renderer = m_CreateFun(m_Width, m_Height, name);
 	if (!m_Renderer)
 		throw std::exception();
-	m_Difficulty = 1;
+	m_Difficulty = 5;
 	s = new Snoekie(m_Renderer);
 	f = new Food(Vec((rand() % (m_Width)), (rand() % (m_Height)), 0));
+	m_Techno = false;
 }
 
 Game::Game()
@@ -100,23 +101,27 @@ void Game::Update()
 	static int tick = 100;
 	try
 	{
-		if (m_Renderer->GetKey(NB_KEY_1) == NB_PRESS && !(yv < 0))
+		std::stringstream ss;
+		if (m_Renderer->GetKey(NB_KEY_1) == NB_PRESS)
 		{
 			delete m_Renderer;
 			LoadDLL("lib/libOpengl.so");
-			m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+			ss << m_Name << " ::OpenGL::";
+			m_Renderer = m_CreateFun(m_Width, m_Height, ss.str());
 		}
-		if (m_Renderer->GetKey(NB_KEY_2) == NB_PRESS && !(yv < 0))
+		if (m_Renderer->GetKey(NB_KEY_2) == NB_PRESS)
 		{
 			delete m_Renderer;
 			LoadDLL("lib/libSDL.so");
-			m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+			ss << m_Name << " ::SDL::";
+			m_Renderer = m_CreateFun(m_Width, m_Height, ss.str());
 		}
-		if (m_Renderer->GetKey(NB_KEY_3) == NB_PRESS && !(yv < 0))
+		if (m_Renderer->GetKey(NB_KEY_3) == NB_PRESS)
 		{
 			delete m_Renderer;
 			LoadDLL("lib/libSFML.so");
-			m_Renderer = m_CreateFun(m_Width, m_Height, m_Name);
+			ss << m_Name << " ::SFML::";
+			m_Renderer = m_CreateFun(m_Width, m_Height, ss.str());
 		}
 	} catch (const std::exception &e)
 	{
@@ -142,16 +147,28 @@ void Game::Update()
 		yv = 0;
 		xv = 1;
 	}
+	static int timestep = 0;
+	if (timestep > 25)
+	{
+		timestep = 0;
+		if (m_Techno)
+			(this->m_Tick == 1) ? m_Renderer->SetClearColour({0.3, 0.3, 0.7, 1}) : m_Renderer->SetClearColour({0.3,0.7,0.6, 1});
+		else
+			m_Renderer->SetClearColour({0,0,0,1});
+		if (m_Tick == 1) m_Tick = 0; else m_Tick = 1;
+	}
+	timestep++;
 	if ((tick += m_Difficulty) >= 100)
 	{
 		lxv = xv, lyv = yv;
 		tick = 0;
 
 		bool overFood = (f) ? s->collision(f) : false;
+		s->Move({static_cast<int>(xv), static_cast<int>(yv), 0}, overFood);
 		if (overFood)
 		{
-			this->score++;
-			this->m_Difficulty += 1;
+			this->score += (m_Techno) ? 2 : 1;
+			this->m_Difficulty += 5;
 			delete f;
 			f = nullptr;
 		}
@@ -159,11 +176,12 @@ void Game::Update()
 			f = new Food(Vec((rand() % (m_Width)), (rand() % (m_Height)), 0));
 		if(s->inBounds(s->getSnoekie().back() + Vec<int>({xv, yv, 0})))
 			KillSnake();
-		s->Move({static_cast<int>(xv), static_cast<int>(yv), 0}, overFood);
 		if (m_Renderer->GetKey(NB_KEY_SPACE))
 		{
 		}
 		s->Update(m_Renderer);
+		if (this->score >= 4 && !m_Techno)
+			m_Techno = true;
 	}
 }
 

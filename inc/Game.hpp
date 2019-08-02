@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 13:12:47 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 14:53:53 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/08/02 09:24:28 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ private:
 	Game();
 	t_milli getCurrentTime();
 
+	bool m_Techno;
 	int m_FPS;
 	int m_Width;
 	int m_Height;
@@ -56,5 +57,6 @@ private:
 	void *m_DLLHandle;
 	int xv, yv;
 	int m_Difficulty;
+	int m_Tick;
 	fun_t m_CreateFun;
 };

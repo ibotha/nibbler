@@ -207,7 +207,7 @@ void SDLRenderer::DrawSquare(int x, int y, const Color &c)
 {
 	SDL_Rect r;
 	r.x = (x / (double) m_Width) * SCREEN_W;
-	r.y = (-y / (double) m_Height) * SCREEN_H + SCREEN_W;
+	r.y = ((-y - 1) / (double) m_Height) * SCREEN_H + SCREEN_W;
 	r.w = (1 / (double) m_Width) * SCREEN_W;
 	r.h = (1 / (double) m_Height) * SCREEN_H;
 	SDL_SetRenderDrawColor(ren, c.r * 255, c.g * 255, c.b * 255, c.a * 255);

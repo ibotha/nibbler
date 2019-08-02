@@ -6,7 +6,7 @@
 /*   By: jwolf <jwolf@student.wethinkcode.co.za>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/31 10:40:42 by ibotha            #+#    #+#             */
-/*   Updated: 2019/07/31 14:46:00 by jwolf            ###   ########.fr       */
+/*   Updated: 2019/08/02 09:08:58 by jwolf            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void SFMLRenderer::GetInput()
 
 void SFMLRenderer::SetClearColour(const Color &c)
 {
-	m_ClearColor = c;
+	m_ClearColor = {static_cast<uint8_t>(c.r * 255), static_cast<uint8_t>(c.g * 255), static_cast<uint8_t>(c.b * 255), static_cast<uint8_t>(c.a * 255)};
 }
 
 void SFMLRenderer::DrawSquare(int x, int y, const Color &c)
@@ -185,7 +185,7 @@ void SFMLRenderer::DrawSquare(int x, int y, const Color &c)
 	(void)c;
 	sf::Vector2f p(
 		(x / (double) m_Width) * SCREEN_W,
-		(-y / (double) m_Height) * SCREEN_H + SCREEN_W
+		((-y - 1) / (double) m_Height) * SCREEN_H + SCREEN_W
 	);
 
 	sf::Vector2f s(
@@ -202,7 +202,7 @@ void SFMLRenderer::DrawSquare(int x, int y, const Color &c)
 
 void SFMLRenderer::BeginFrame()
 {
-	m_Win.clear();
+	m_Win.clear(m_ClearColor);
 }
 
 void SFMLRenderer::EndFrame()
