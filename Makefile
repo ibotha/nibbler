@@ -169,6 +169,7 @@ fclean: clean
 	@make clean -C glfw
 	@rm -rf SDL2
 	@rm -rf SDL2.tar.gz
+	@rm -rf $(SFML_DIR)
 	@rm -rf SFML
 
 re: fclean all
